@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "next": "^16.3.5",
+    "tailwind": "^4.0.0",
+    "tailwindcss": "^4.3.3"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.1",
+    "@types/react": "19.3.0",
+    "typescript": "7.0.2"
+  }
+}
