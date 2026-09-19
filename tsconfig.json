@@ -6,6 +6,14 @@
       "dom.iterable",
       "esnext"
     ],
+    "paths": {
+      "@*": ["./*"],
+      "@features": ["./features/*"],
+      "@shared": ["./shared/*"],
+      "@public": ["./public/*"],
+      "@config": ["./config/*"],
+      "@lib": ["./lib/*"]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,

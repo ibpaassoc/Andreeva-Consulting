@@ -13,7 +13,7 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
 })
 
-export default function RootLayout({children}: {children: ReactNode}) {
+export default async function RootLayout({children}: {children:ReactNode}) {
 
   return (
     <html>

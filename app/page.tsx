@@ -1,8 +1,5 @@
-export default function Homepage() {
+import { redirect } from "next/navigation";
 
-  return (
-    <div>
-      <h1>Вы уже профессионал. Осталось оформить это законно</h1>
-    </div>
-  )
+export default function Page() {
+  redirect("/en");
 }
