@@ -1,18 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --color-background: #f7f4ef;
-  --color-background-secondary: #efeae3;
   --surface: #fcfbf8;
-
-  --color-text-heading: #14263a;
-  --color-text-body: #817a72;
-  --color-text-secondary: #4e4d49;
-
-  --color-gold: #a98755;
-  --color-gold-light: #c8b083;
-
-  --color-border-default: #ded6cb;
 }
 
 @theme {
@@ -21,6 +10,15 @@
 
   --color-gold: #a98755;
   --color-navy: #14263a;
+
+  --color-background: #efeae3;
+  --color-background-secondary: #f7f4ef;
+
+  --color-text-heading: #14263a;
+  --color-text-body: #817a72;
+  --color-text-secondary: #4e4d49;
+
+  --color-border-default: #ded6cb;
 }
 
 html {
@@ -44,4 +42,20 @@ h6 {
 h1 {
   color: var(--color-text-heading);
   font-weight: 700;
+}
+
+.navLink {
+  @apply
+    text-[15px]
+    font-medium
+    uppercase
+    tracking-[0.04em]
+    text-navy
+    transition-all;
+}
+
+.navLink:hover {
+  @apply 
+    opacity-60
+    text-gold;
 }
