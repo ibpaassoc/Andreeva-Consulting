@@ -12,6 +12,18 @@ export const en = {
     faq: "FAQ",
     contact: "Contact",
   },
+  mobileMenu: {
+    open: "Open menu",
+    close: "Close menu",
+    label: "Menu",
+    descriptions: [
+      "Licensing, business setup, and insurance",
+      "A clear path from documents to a decision",
+      "Stories from our clients",
+      "Answers to common licensing questions",
+      "Ways to get in touch",
+    ],
+  },
   hero: {
     eyebrow: "Beauty licensing & business support",
     title: "Your experience deserves a place in the U.S. beauty industry",
