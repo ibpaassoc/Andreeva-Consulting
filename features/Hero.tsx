@@ -1,22 +1,14 @@
-import { Language } from "@lib/i18n";
+import type { Language } from "@lib/i18n";
+import { getDictionary } from "@lib/i18n";
 import HeroBackground from "./Hero/HeroBackground";
-import TitleSection from "./Hero/TitleSection";
-import ButtonSection from "./Hero/ButtonSection";
-
-interface HeroProps {
-  lang:Language
-}
-
-export default function Hero({
-  lang
-}:HeroProps) {
-  return (
-    <section className="relative h-[calc(100svh-100px)] overflow-hidden">
-      <HeroBackground />
-      <div className="relative z-10 h-full max-w-[650px] mx-[7vw] my-[5vw]">
-        <TitleSection lang={lang} />
-        <ButtonSection lang={lang} />
-      </div>
-    </section>
-  )
+import HeroMotion from "./Hero/HeroMotion";
+import { BookConsultationButton } from "@shared/";
+export default function Hero({ lang }: { lang: Language }) {
+  const t = getDictionary(lang);
+  return <section className="hero" aria-labelledby="hero-title"><HeroBackground /><div className="hero-copy"><HeroMotion>
+    <p className="eyebrow">{t.hero.eyebrow}</p><h1 id="hero-title">{t.hero.title}</h1>
+    <p className="hero-description">{t.hero.description}</p>
+    <ul className="hero-facts">{t.hero.facts.map(fact => <li key={fact}>{fact}</li>)}</ul>
+    <BookConsultationButton lang={lang} /><p className="hero-note">{t.hero.buttonDescription}</p>
+  </HeroMotion></div></section>;
 }

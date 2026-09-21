@@ -1,15 +1,17 @@
 import Link from "next/link";
+import type { Language } from "@lib/i18n";
 
 interface LanguageSwitcherProps {
-  lang: string;
+  lang: Language;
 }
 
 export default function LanguageSwitcher({lang}: LanguageSwitcherProps) {
-  console.log("LANG:", lang);
   return (
-    <div className="hidden md:flex items-center gap-3 text-[14px] uppercase">
+    <div aria-label="Language / Язык" className="language-switcher">
       <Link 
         href="/en"
+        hrefLang="en"
+        aria-current={lang === "en" ? "page" : undefined}
         className={
           lang === "en" 
           ? "text-gold"
@@ -22,7 +24,9 @@ export default function LanguageSwitcher({lang}: LanguageSwitcherProps) {
       <span className="text-neutral-300"> | </span>
 
       <Link 
-        href="/ru"
+        href="/"
+        hrefLang="ru"
+        aria-current={lang === "ru" ? "page" : undefined}
         className={
           lang === "ru" 
           ? "text-gold"

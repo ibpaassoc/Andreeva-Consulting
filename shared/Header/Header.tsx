@@ -13,9 +13,9 @@ interface HeaderProps {
 
 export default function Header({lang}:HeaderProps) {
   return (
-    <header className="sticky top-0 z-50 bg-background-secondary w-full">
-      <Container className="flex h-[100px] items-center justify-between">
-        <Logo/>
+    <header id="header" className="site-header">
+      <Container className="header-inner">
+        <Logo lang={lang}/>
         <DesktopNav lang={lang} />
         <LanguageSwitcher lang={lang} />
         <BookConsultationButton lang={lang} />

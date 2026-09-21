@@ -1,17 +1,18 @@
 import Link from "next/link"
-import { navigation } from "@config/navigation"
+import { homePath, navigation } from "@config/navigation"
+import type { Language } from "@lib/i18n"
 
 interface DesktopNavProps {
-  lang: string;
+  lang: Language;
 }
 
 export default function DesktopNav({lang}:DesktopNavProps) {
   return (
-    <nav className="hidden md:flex items-center gap-4">
-      {navigation.map((item) => (
+    <nav aria-label={lang === "ru" ? "Основная навигация" : "Main navigation"} className="site-nav">
+      {navigation(lang).map((item) => (
         <Link
           key={item.href}
-          href={`/${lang}${item.href}`}
+          href={`${homePath(lang)}#${item.href}`}
           className={`navLink`}
         >
           {item.label}

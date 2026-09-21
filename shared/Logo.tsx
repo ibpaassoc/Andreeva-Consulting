@@ -1,17 +1,20 @@
-import Image from "@node_modules/next/image"
-import Link from "@node_modules/next/link"
+import Image from "next/image"
+import Link from "next/link"
+import { homePath } from "@config/navigation"
+import type { Language } from "@lib/i18n"
 
-export default function Logo() {
+export default function Logo({ lang }: { lang: Language }) {
   return (
     <Link
-      href={"/#header"}
+      href={homePath(lang)}
+      aria-label="Andreeva Consulting — Home"
     >
       <Image
         src={`/images/logo.png`}
         width={280}
         height={100}
         alt="Andreeva Consulting logo"
-        className="w-45 md:w-60 lg:w-75 h-auto"
+        className="brand-logo"
       />
     </Link>
   )

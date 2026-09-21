@@ -1,25 +1,17 @@
-import Image from "@node_modules/next/image"
+import Image from "next/image"
 
 export default function HeroBackground() {
   return (
-    <>
+    <div className="hero-visual">
       <Image
         src="/images/hero.png"
         alt="Andreeva Consulting founder image"
         sizes="100vw"
         fill
         priority
-        className="object-cover object-[65%_center] w-full"
+        className="object-cover object-center"
       />
 
-      {/* White cover / fade */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to right, white 0%, white 15%, rgba(255,255,255,0.9) 40%, rgba(255,255,255,0) 70%)",
-        }}
-      />
-    </>
+    </div>
   )
 }

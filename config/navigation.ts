@@ -1,31 +1,9 @@
-
-export const navigation = [
-  {
-    label: "Home",
-    href: "",
-  },
-  {
-    label: "Services",
-    href: "/services",
-  },
-  {
-    label: "Licensing",
-    href: "/licensing",
-  },
-  {
-    label: "For Salon Owners",
-    href: "/salon-owners",
-  },
-  {
-    label: "About",
-    href: "/about",
-  },
-  {
-    label: "FAQ",
-    href: "/faq",
-  },
-  {
-    label: "Contact",
-    href: "/contact",
-  },
+import type { Language } from "@lib/i18n";
+export const homePath = (lang: Language) => lang === "ru" ? "/" : "/en";
+export const navigation = (lang: Language) => [
+  { label: lang === "ru" ? "Услуги" : "Services", href: "services" },
+  { label: lang === "ru" ? "Как работаем" : "Our process", href: "process" },
+  { label: lang === "ru" ? "Отзывы" : "Reviews", href: "reviews" },
+  { label: "FAQ", href: "faq" },
+  { label: lang === "ru" ? "Контакты" : "Contact", href: "contact" },
 ];
