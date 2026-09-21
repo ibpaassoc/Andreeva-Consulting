@@ -3,7 +3,7 @@ import QuestionForm from "./QuestionForm";
 export default function Booking({ lang }: { lang: Language }) {
   const ru = lang === "ru";
   const calendlyUrl = process.env.NEXT_PUBLIC_CALENDLY_URL;
-  const validUrl = calendlyUrl && /^https:\/\/calendly\.com\/[a-zA-Z0-9_/-]+$/.test(calendlyUrl);
+  const validUrl = calendlyUrl && process.env.PRIVACY_COPY_APPROVED === "true" && /^https:\/\/calendly\.com\/[a-zA-Z0-9_/-]+$/.test(calendlyUrl);
   const formEnabled = Boolean(process.env.RESEND_API_KEY && process.env.QUESTION_TO_EMAIL && process.env.QUESTION_FROM_EMAIL && process.env.PRIVACY_COPY_APPROVED === "true");
   return <section id="booking" className="section booking-section"><div className="page-shell">
     <p className="eyebrow">{ru ? "Бесплатная консультация" : "Free consultation"}</p><h2>{ru ? "Давайте посмотрим ваши документы" : "Let’s review your documents"}</h2>
