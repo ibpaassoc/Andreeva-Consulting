@@ -11,7 +11,7 @@ export default function LegalPage({ lang, type }: LegalPageProps) {
 
   return (
     <>
-      <Header lang={lang} />
+      <Header lang={lang} route={type} />
       <main className="legal-page page-shell">
         <p className="eyebrow">Andreeva Consulting Inc.</p>
         <h1>{t[type]}</h1>
