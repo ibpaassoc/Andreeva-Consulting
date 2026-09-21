@@ -1,6 +1,6 @@
 # Andreeva Consulting
 
-Bilingual Next.js marketing site: Russian `/`, English `/en`, legal routes `/terms`, `/privacy`, `/en/terms`, and `/en/privacy`. Content sections are small feature components; shared brand controls live in `shared/`, service copy in `features/Services/content.ts`, and global design tokens in `app/globals.css` and `DESIGN.md`.
+Bilingual Next.js marketing site: Russian `/`, English `/en`, legal routes `/terms`, `/privacy`, `/en/terms`, and `/en/privacy`. Content sections are small feature components; shared brand controls live in `shared/`, service copy in `lib/i18n/en.ts` and `lib/i18n/ru.ts`, and global design tokens in `app/globals.css` and `DESIGN.md`.
 
 ## Run
 
