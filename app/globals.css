@@ -181,6 +181,7 @@ textarea:focus-visible {
   inset: 0;
 }
 .hero-visual img {
+  /* Next Image's fill attribute sets an inline width; the wider crop positions the portrait clear of the copy. */
   width: 120% !important;
   max-width: none;
   object-fit: cover;
@@ -396,6 +397,7 @@ textarea:focus-visible {
     height: clamp(260px, 65vw, 390px);
   }
   .hero-visual img {
+    /* Restore the natural crop for the stacked mobile image. */
     width: 100% !important;
   }
   .hero-visual::after {
