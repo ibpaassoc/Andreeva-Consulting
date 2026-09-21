@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { homePath } from "@config/navigation";
 import { getDictionary, type Language, type Service } from "@lib/i18n";
-import { BookConsultationButton } from "@shared/";
+
+gsap.registerPlugin(useGSAP);
 
 type ServiceCardProps = {
   service: Service;
@@ -16,30 +20,85 @@ export default function ServiceCard({
   lang,
 }: ServiceCardProps) {
   const [open, setOpen] = useState(false);
-  const t = getDictionary(lang).services;
-  const id = `service-details-${index}`;
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const { services: t, common } = getDictionary(lang);
+  const titleId = `service-title-${index}`;
+  const dialogTitleId = `service-dialog-title-${index}`;
+
+  useGSAP(
+    () => {
+      const dialog = dialogRef.current;
+      if (!open || !dialog) return;
+
+      dialog.showModal();
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      gsap.from(".service-dialog-panel", {
+        x: 36,
+        autoAlpha: 0,
+        duration: 0.42,
+        ease: "power2.out",
+        clearProps: "all",
+      });
+    },
+    { scope: dialogRef, dependencies: [open], revertOnUpdate: true },
+  );
+
+  function closeDialog() {
+    dialogRef.current?.close();
+  }
+
+  function handleClose() {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }
 
   return (
-    <article className={`service-card ${open ? "is-open" : ""}`}>
+    <article className="service-card">
       <span className="service-number">
         {String(index + 1).padStart(2, "0")}
       </span>
-      <h3>{service.title}</h3>
+      <h3 id={titleId}>{service.title}</h3>
       <p>{service.teaser}</p>
       <button
+        ref={triggerRef}
         className="text-action"
         type="button"
-        aria-expanded={open}
-        aria-controls={id}
-        onClick={() => setOpen(!open)}
+        aria-haspopup="dialog"
+        aria-labelledby={`${titleId} service-more-${index}`}
+        onClick={() => setOpen(true)}
       >
-        {open ? t.close : t.more}{" "}
-        <span aria-hidden="true">{open ? "−" : "+"}</span>
+        <span id={`service-more-${index}`}>{t.more}</span>
+        <span aria-hidden="true">+</span>
       </button>
-      {open && (
-        <div id={id} className="service-details">
-          <p>{service.intro}</p>
-          <h4>{t.includes}</h4>
+
+      <dialog
+        ref={dialogRef}
+        className="service-dialog"
+        aria-labelledby={dialogTitleId}
+        onClose={handleClose}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) closeDialog();
+        }}
+      >
+        <div className="service-dialog-panel">
+          <div className="service-dialog-topline">
+            <span className="service-number">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <button
+              className="service-dialog-close"
+              type="button"
+              aria-label={t.close}
+              onClick={closeDialog}
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <h2 id={dialogTitleId}>{service.title}</h2>
+          <p className="service-dialog-intro">{service.intro}</p>
+          <h3>{t.includes}</h3>
           <ul>
             {service.includes.map((item) => (
               <li key={item}>{item}</li>
@@ -53,9 +112,15 @@ export default function ServiceCard({
             <strong>{t.needs}</strong>
             {service.needs}
           </p>
-          <BookConsultationButton lang={lang} />
+          <a
+            className="button button-primary"
+            href={`${homePath(lang)}#booking`}
+            onClick={closeDialog}
+          >
+            {common.bookConsultation}
+          </a>
         </div>
-      )}
+      </dialog>
     </article>
   );
 }
