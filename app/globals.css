@@ -912,6 +912,9 @@ body:has(.service-dialog[open]) {
 .question-panel textarea[aria-invalid="true"] {
   border-color: #a43636;
 }
+.question-panel button[type="submit"] {
+  width: min(100%, 240px);
+}
 .question-panel button:disabled {
   opacity: 0.6;
   cursor: wait;
