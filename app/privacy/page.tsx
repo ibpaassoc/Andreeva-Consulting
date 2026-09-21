@@ -1,4 +1,11 @@
 import type { Metadata } from "next";
 import LegalPage from "@features/LegalPage";
-export const metadata: Metadata = { title: "Политика конфиденциальности | Andreeva Consulting" };
-export default function Page() { return <LegalPage lang="ru" type="privacy" />; }
+import { getDictionary } from "@lib/i18n";
+
+export const metadata: Metadata = {
+  title: getDictionary("ru").metadata.privacyTitle,
+};
+
+export default function Page() {
+  return <LegalPage lang="ru" type="privacy" />;
+}

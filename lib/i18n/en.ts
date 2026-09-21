@@ -1,4 +1,12 @@
 export const en = {
+  metadata: {
+    defaultTitle: "Andreeva Consulting | Beauty licensing in the U.S.",
+    defaultDescription:
+      "Licensing and business support for beauty professionals in the United States.",
+    homeTitle: "Beauty licensing & business support | Andreeva Consulting",
+    termsTitle: "Terms of service | Andreeva Consulting",
+    privacyTitle: "Privacy policy | Andreeva Consulting",
+  },
   common: {
     bookConsultation: "Book a free consultation",
     brandHome: "Andreeva Consulting — Home",
@@ -259,6 +267,7 @@ export const en = {
     name: "Name",
     contact: "Email or phone",
     question: "Your question",
+    website: "Website",
     missingFields: "Enter your name, contact details, and question.",
     sendError: "Message not sent. Please try again later.",
     sent: "Message sent.",

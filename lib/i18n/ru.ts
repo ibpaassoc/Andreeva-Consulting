@@ -1,4 +1,12 @@
 export const ru = {
+  metadata: {
+    defaultTitle: "Andreeva Consulting | Лицензирование бьюти-мастеров в США",
+    defaultDescription:
+      "Помощь бьюти-мастерам с лицензированием и развитием бизнеса в США.",
+    homeTitle: "Лицензия мастера в США | Andreeva Consulting",
+    termsTitle: "Договор оферты | Andreeva Consulting",
+    privacyTitle: "Политика конфиденциальности | Andreeva Consulting",
+  },
   common: {
     bookConsultation: "Записаться на бесплатную консультацию",
     brandHome: "Andreeva Consulting — Главная",
@@ -254,6 +262,7 @@ export const ru = {
     name: "Имя",
     contact: "E-mail или телефон",
     question: "Ваш вопрос",
+    website: "Сайт",
     missingFields: "Заполните имя, способ связи и вопрос.",
     sendError: "Сообщение не отправлено. Попробуйте ещё раз позже.",
     sent: "Сообщение отправлено.",

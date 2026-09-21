@@ -1,5 +1,5 @@
-export { default as Header } from "./Header/Header"
-export { default as Footer } from "./Footer"
-export { default as Container } from "./Container"
-export { default as Logo } from "./Logo"
-export { default as BookConsultationButton } from "./Buttons"
+export { default as Header } from "./Header/Header";
+export { default as Footer } from "./Footer";
+export { default as Container } from "./Container";
+export { default as Logo } from "./Logo";
+export { default as BookConsultationButton } from "./Buttons";

@@ -111,7 +111,7 @@ export default function QuestionForm({
           </label>
           <div className="honeypot" aria-hidden="true">
             <label>
-              Website
+              {t.website}
               <input name="website" tabIndex={-1} autoComplete="off" />
             </label>
           </div>

@@ -1,4 +1,11 @@
 import HomePage from "@features/HomePage";
 import type { Metadata } from "next";
-export const metadata: Metadata = { title: "Лицензия мастера в США | Andreeva Consulting" };
-export default function Page() { return <HomePage lang="ru" />; }
+import { getDictionary } from "@lib/i18n";
+
+export const metadata: Metadata = {
+  title: getDictionary("ru").metadata.homeTitle,
+};
+
+export default function Page() {
+  return <HomePage lang="ru" />;
+}
