@@ -3,36 +3,94 @@ import { NextResponse } from "next/server";
 const MAX_BODY_BYTES = 8192;
 const RATE_LIMIT_MAX_REQUESTS = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_SCRIPT = `
+local limit = tonumber(ARGV[1])
+local window = tonumber(ARGV[2])
+local count = tonumber(redis.call("GET", KEYS[1]) or "0")
+local ttl = redis.call("TTL", KEYS[1])
+local allowed = 0
+
+if count < limit then
+  count = redis.call("INCR", KEYS[1])
+  allowed = 1
+end
+
+if ttl < 0 then
+  redis.call("EXPIRE", KEYS[1], window)
+  ttl = window
+end
+
+return { count, ttl, allowed }
+`;
 
 function getClientKey(request: Request) {
-  const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  const realIp = request.headers.get("x-real-ip")?.trim();
-  return (realIp || forwardedFor || "unknown").slice(0, 128);
+  if (process.env.VERCEL !== "1") return null;
+  // Vercel overwrites this header with the public client IP before invoking the route.
+  const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  return clientIp && clientIp.length <= 128 ? clientIp : null;
 }
 
-function checkRateLimit(request: Request) {
-  const now = Date.now();
-  const key = getClientKey(request);
-  const current = rateLimitStore.get(key);
+async function hashClientKey(clientKey: string) {
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(clientKey),
+  );
+  return Array.from(new Uint8Array(digest), (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("");
+}
 
-  if (!current || current.resetAt <= now) {
-    rateLimitStore.set(key, {
-      count: 1,
-      resetAt: now + RATE_LIMIT_WINDOW_MS,
+async function checkRateLimit(clientKey: string) {
+  const url = process.env.UPSTASH_REDIS_REST_URL?.replace(/\/$/, "");
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return { available: false, allowed: false, retryAfter: 0 };
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([
+        "EVAL",
+        RATE_LIMIT_SCRIPT,
+        "1",
+        `question-rate:${await hashClientKey(clientKey)}`,
+        String(RATE_LIMIT_MAX_REQUESTS),
+        String(Math.ceil(RATE_LIMIT_WINDOW_MS / 1000)),
+      ]),
+      signal: AbortSignal.timeout(2000),
     });
-    return { allowed: true, retryAfter: 0 };
-  }
+    if (!response.ok) return { available: false, allowed: false, retryAfter: 0 };
 
-  if (current.count >= RATE_LIMIT_MAX_REQUESTS) {
-    return {
-      allowed: false,
-      retryAfter: Math.max(1, Math.ceil((current.resetAt - now) / 1000)),
+    const result = (await response.json()) as {
+      error?: string;
+      result?: unknown;
     };
-  }
+    if (
+      result.error ||
+      !Array.isArray(result.result) ||
+      result.result.length < 3
+    ) {
+      return { available: false, allowed: false, retryAfter: 0 };
+    }
 
-  current.count += 1;
-  return { allowed: true, retryAfter: 0 };
+    const count = Number(result.result[0]);
+    const ttl = Number(result.result[1]);
+    const allowed = Number(result.result[2]) === 1;
+    if (!Number.isFinite(count) || !Number.isFinite(ttl)) {
+      return { available: false, allowed: false, retryAfter: 0 };
+    }
+
+    return {
+      available: true,
+      allowed,
+      retryAfter: Math.max(1, Math.ceil(ttl)),
+    };
+  } catch {
+    return { available: false, allowed: false, retryAfter: 0 };
+  }
 }
 
 async function verifyChallenge(token: string, remoteIp: string) {
@@ -93,7 +151,14 @@ async function readRequestBody(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const rateLimit = checkRateLimit(request);
+  const clientKey = getClientKey(request);
+  if (!clientKey) {
+    return NextResponse.json({ error: "Unavailable" }, { status: 503 });
+  }
+  const rateLimit = await checkRateLimit(clientKey);
+  if (!rateLimit.available) {
+    return NextResponse.json({ error: "Unavailable" }, { status: 503 });
+  }
   if (!rateLimit.allowed) {
     const response = NextResponse.json(
       { error: "Too many requests" },
@@ -123,7 +188,7 @@ export async function POST(request: Request) {
   const question = typeof data.question === "string" ? data.question.trim() : "";
   if (!name || !contact || !question || name.length > 100 || contact.length > 150 || question.length > 3000) return NextResponse.json({ error: "Invalid fields" }, { status: 400 });
   const challengeToken = typeof data.challengeToken === "string" ? data.challengeToken : "";
-  if (!(await verifyChallenge(challengeToken, getClientKey(request)))) return NextResponse.json({ error: "Challenge failed" }, { status: 403 });
+  if (!(await verifyChallenge(challengeToken, clientKey))) return NextResponse.json({ error: "Challenge failed" }, { status: 403 });
   try {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST", headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
