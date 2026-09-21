@@ -170,7 +170,7 @@ textarea:focus-visible {
 }
 .hero {
   position: relative;
-  min-height: min(740px, calc(100svh - 88px));
+  height:  calc(100svh - 100px);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -204,7 +204,7 @@ textarea:focus-visible {
   width: min(62%, 840px);
   position: relative;
   z-index: 1;
-  padding: 76px 24px 76px max(40px, calc((100vw - 1440px) / 2 + 40px));
+  padding: 0px 24px 76px max(40px, calc((100vw - 1440px) / 2 + 40px));
 }
 .eyebrow {
   margin: 0 0 22px;
