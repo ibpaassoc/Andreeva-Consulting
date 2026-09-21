@@ -269,6 +269,7 @@ export const en = {
     question: "Your question",
     website: "Website",
     missingFields: "Enter your name, contact details, and question.",
+    challengeRequired: "Complete the verification before sending.",
     sendError: "Message not sent. Please try again later.",
     sent: "Message sent.",
     sending: "Sending…",

@@ -5,6 +5,8 @@ export default function Booking({ lang }: { lang: Language }) {
   const t = getDictionary(lang).booking;
   const calendlyUrl = process.env.NEXT_PUBLIC_CALENDLY_URL;
   const privacyApproved = process.env.PRIVACY_COPY_APPROVED === "true";
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const challengeRequired = Boolean(process.env.TURNSTILE_SECRET_KEY);
   const validUrl =
     calendlyUrl &&
     privacyApproved &&
@@ -13,7 +15,8 @@ export default function Booking({ lang }: { lang: Language }) {
     process.env.RESEND_API_KEY &&
       process.env.QUESTION_TO_EMAIL &&
       process.env.QUESTION_FROM_EMAIL &&
-      privacyApproved,
+      privacyApproved &&
+      (!challengeRequired || turnstileSiteKey),
   );
 
   return (

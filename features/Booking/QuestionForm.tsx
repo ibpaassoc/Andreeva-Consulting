@@ -1,10 +1,27 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { getDictionary, type Language } from "@lib/i18n";
 
 type Field = "name" | "contact" | "question";
 type Status = "idle" | "sending" | "sent" | "error";
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: HTMLElement,
+        options: {
+          sitekey: string;
+          callback: (token: string) => void;
+          "expired-callback": () => void;
+          "error-callback": () => void;
+        },
+      ) => string;
+      remove?: (widgetId: string) => void;
+    };
+  }
+}
 
 export default function QuestionForm({
   lang,
@@ -20,6 +37,64 @@ export default function QuestionForm({
   const nameRef = useRef<HTMLInputElement>(null);
   const contactRef = useRef<HTMLInputElement>(null);
   const questionRef = useRef<HTMLTextAreaElement>(null);
+  const challengeRef = useRef<HTMLDivElement>(null);
+  const challengeWidgetId = useRef<string | null>(null);
+  const [challengeToken, setChallengeToken] = useState("");
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  useEffect(() => {
+    if (!enabled || !turnstileSiteKey) return;
+
+    const renderChallenge = () => {
+      if (
+        !challengeRef.current ||
+        !window.turnstile ||
+        challengeWidgetId.current
+      ) {
+        return;
+      }
+
+      challengeWidgetId.current = window.turnstile.render(
+        challengeRef.current,
+        {
+          sitekey: turnstileSiteKey,
+          callback: setChallengeToken,
+          "expired-callback": () => setChallengeToken(""),
+          "error-callback": () => setChallengeToken(""),
+        },
+      );
+    };
+
+    const scriptSelector = 'script[data-question-challenge="turnstile"]';
+    let script = document.querySelector<HTMLScriptElement>(scriptSelector);
+    let onLoad: (() => void) | undefined;
+
+    if (script) {
+      if (window.turnstile) renderChallenge();
+      else {
+        onLoad = renderChallenge;
+        script.addEventListener("load", onLoad);
+      }
+    } else {
+      script = document.createElement("script");
+      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+      script.async = true;
+      script.defer = true;
+      script.dataset.questionChallenge = "turnstile";
+      onLoad = renderChallenge;
+      script.addEventListener("load", onLoad);
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      if (script && onLoad) script.removeEventListener("load", onLoad);
+      if (challengeWidgetId.current && window.turnstile?.remove) {
+        window.turnstile.remove(challengeWidgetId.current);
+      }
+      challengeWidgetId.current = null;
+      setChallengeToken("");
+    };
+  }, [enabled, turnstileSiteKey]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -37,6 +112,10 @@ export default function QuestionForm({
       (!name ? nameRef : !contact ? contactRef : questionRef).current?.focus();
       return;
     }
+    if (turnstileSiteKey && !challengeToken) {
+      setError(t.challengeRequired);
+      return;
+    }
 
     setError("");
     setInvalid(null);
@@ -51,6 +130,7 @@ export default function QuestionForm({
           contact,
           question,
           website: data.get("website"),
+          challengeToken,
         }),
         signal: AbortSignal.timeout(15000),
       });
@@ -115,6 +195,7 @@ export default function QuestionForm({
               <input name="website" tabIndex={-1} autoComplete="off" />
             </label>
           </div>
+          {turnstileSiteKey && <div ref={challengeRef} />}
           <p id="question-error" role="alert" className="form-status">
             {error || (status === "sent" ? t.sent : "\u00a0")}
           </p>
