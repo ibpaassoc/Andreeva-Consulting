@@ -1,4 +1,4 @@
-import { ReactNode } from "@node_modules/@types/react";
+import type { ReactNode } from "react";
 
 type ContainerProps = {
   children: ReactNode;

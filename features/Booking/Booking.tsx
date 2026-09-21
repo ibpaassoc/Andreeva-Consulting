@@ -8,7 +8,7 @@ export default function Booking({ lang }: { lang: Language }) {
   return <section id="booking" className="section booking-section"><div className="page-shell">
     <p className="eyebrow">{ru ? "Бесплатная консультация" : "Free consultation"}</p><h2>{ru ? "Давайте посмотрим ваши документы" : "Let’s review your documents"}</h2>
     <p className="booking-lead">{ru ? "За 30 минут обсудим образование и опыт, требования штата и возможный путь. Встреча онлайн, без обязательств." : "In 30 minutes, we’ll discuss your education and experience, state requirements, and possible next steps. Online, with no obligation."}</p>
-    <div className="booking-grid"><div className="calendar-panel"><h3>{ru ? "Выберите время" : "Choose a time"}</h3>
+    <div className="booking-grid"><div className={`calendar-panel ${validUrl ? "" : "calendar-pending"}`}><h3>{ru ? "Выберите время" : "Choose a time"}</h3>
       {validUrl ? <><iframe title={ru ? "Календарь записи на бесплатную консультацию" : "Free consultation booking calendar"} src={calendlyUrl} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /><p><a href={calendlyUrl} target="_blank" rel="noopener noreferrer">{ru ? "Открыть календарь в новой вкладке" : "Open calendar in a new tab"} ↗</a></p></> : <p className="configuration-note">{ru ? "Онлайн-запись появится здесь после подключения календаря компании." : "Online scheduling will appear here once the company calendar is connected."}</p>}
     </div><QuestionForm lang={lang} enabled={formEnabled} /></div>
   </div></section>;

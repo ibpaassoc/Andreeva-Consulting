@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
+  if (Number(request.headers.get("content-length") || 0) > 8192) return NextResponse.json({ error: "Request too large" }, { status: 413 });
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.QUESTION_TO_EMAIL;
   const from = process.env.QUESTION_FROM_EMAIL;
   if (!apiKey || !to || !from || process.env.PRIVACY_COPY_APPROVED !== "true") return NextResponse.json({ error: "Unavailable" }, { status: 503 });
   let payload: unknown;
-  try { payload = await request.json(); } catch { return NextResponse.json({ error: "Invalid request" }, { status: 400 }); }
+  try { const body = await request.text(); if (body.length > 8192) return NextResponse.json({ error: "Request too large" }, { status: 413 }); payload = JSON.parse(body); } catch { return NextResponse.json({ error: "Invalid request" }, { status: 400 }); }
   if (!payload || typeof payload !== "object") return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   const data = payload as Record<string, unknown>;
   if (data.website) return NextResponse.json({ ok: true });
