@@ -6,6 +6,7 @@ export const en = {
   },
   navigation: {
     label: "Main navigation",
+    languageLabel: "Language",
     services: "Services",
     process: "Our process",
     reviews: "Reviews",

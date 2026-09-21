@@ -6,6 +6,7 @@ export const ru = {
   },
   navigation: {
     label: "Основная навигация",
+    languageLabel: "Язык",
     services: "Услуги",
     process: "Как работаем",
     reviews: "Отзывы",
