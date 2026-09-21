@@ -9,6 +9,23 @@ import Reviews from "./Reviews/Reviews";
 import ExamStates from "./ExamStates";
 import FAQ from "./FAQ";
 import Booking from "./Booking/Booking";
+
 export default function HomePage({ lang }: { lang: Language }) {
-  return <><Header lang={lang} /><main><Hero lang={lang} /><Services lang={lang} /><Process lang={lang} /><Audience lang={lang} /><About lang={lang} /><Reviews lang={lang} /><ExamStates lang={lang} /><FAQ lang={lang} /><Booking lang={lang} /></main><Footer lang={lang} /></>;
+  return (
+    <>
+      <Header lang={lang} />
+      <main>
+        <Hero lang={lang} />
+        <Services lang={lang} />
+        <Process lang={lang} />
+        <Audience lang={lang} />
+        <About lang={lang} />
+        <Reviews lang={lang} />
+        <ExamStates lang={lang} />
+        <FAQ lang={lang} />
+        <Booking lang={lang} />
+      </main>
+      <Footer lang={lang} />
+    </>
+  );
 }

@@ -1,6 +1,22 @@
-import type { Language } from "@lib/i18n";
+import { getDictionary, type Language } from "@lib/i18n";
+
 export default function ExamStates({ lang }: { lang: Language }) {
-  return <section className="section exam-section"><div className="page-shell split-section"><div><p className="eyebrow">{lang === "ru" ? "Честно о границах" : "A clear division of roles"}</p><h2>{lang === "ru" ? "Если в вашем штате нужен экзамен" : "If your state requires an exam"}</h2></div>
-    <div className="exam-copy">{lang === "ru" ? <><p>Мы готовим и подаём документы, получаем допуск к экзамену, а на подготовку направляем к проверенным партнёрам с готовым курсом. Сами мы к экзамену не готовим.</p><p>Вы узнаете об этом заранее: корректная подача и подготовка у специалистов своего дела, без оплаты нам за то, чего мы не делаем.</p><small>Требования зависят от штата и специальности; мы проверим актуальный путь для вас.</small></> : <><p>We prepare and submit the documents and obtain exam eligibility. For exam preparation, we refer you to vetted partners with an established course. We do not teach the exam ourselves.</p><p>We explain this up front: your application is handled correctly and preparation comes from specialists, without charging you for a service we do not provide.</p><small>Requirements vary by state and specialty; we check the current path for your case.</small></>}</div>
-  </div></section>;
+  const t = getDictionary(lang).exam;
+
+  return (
+    <section className="section exam-section">
+      <div className="page-shell split-section">
+        <div>
+          <p className="eyebrow">{t.eyebrow}</p>
+          <h2>{t.title}</h2>
+        </div>
+        <div className="exam-copy">
+          {t.paragraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+          <small>{t.note}</small>
+        </div>
+      </div>
+    </section>
+  );
 }
