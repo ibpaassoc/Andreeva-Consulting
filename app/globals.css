@@ -181,6 +181,8 @@ textarea:focus-visible {
   inset: 0;
 }
 .hero-visual img {
+  width: 120% !important;
+  max-width: none;
   object-fit: cover;
   object-position: center 44%;
 }
@@ -191,10 +193,10 @@ textarea:focus-visible {
   background: linear-gradient(
     90deg,
     var(--paper) 0%,
-    rgba(255, 254, 253, 0.98) 26%,
-    rgba(255, 254, 253, 0.87) 40%,
-    rgba(255, 254, 253, 0.24) 63%,
-    transparent 82%
+    rgba(255, 254, 253, 0.98) 27%,
+    rgba(255, 254, 253, 0.86) 39%,
+    rgba(255, 254, 253, 0.15) 57%,
+    transparent 73%
   );
 }
 .hero-copy {
@@ -392,6 +394,9 @@ textarea:focus-visible {
   .hero-visual {
     position: relative;
     height: clamp(260px, 65vw, 390px);
+  }
+  .hero-visual img {
+    width: 100% !important;
   }
   .hero-visual::after {
     background: linear-gradient(0deg, var(--paper), transparent 24%);
