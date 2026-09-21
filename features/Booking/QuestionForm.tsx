@@ -19,6 +19,7 @@ declare global {
         },
       ) => string;
       remove?: (widgetId: string) => void;
+      reset?: (widgetId: string) => void;
     };
   }
 }
@@ -139,6 +140,10 @@ export default function QuestionForm({
       setStatus("sent");
       form.reset();
     } catch {
+      if (challengeWidgetId.current && window.turnstile?.reset) {
+        window.turnstile.reset(challengeWidgetId.current);
+        setChallengeToken("");
+      }
       setStatus("error");
       setError(t.sendError);
     }
