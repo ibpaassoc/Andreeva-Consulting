@@ -4,7 +4,7 @@
   --ivory: #f7f4ef;
   --navy: #14263a;
   --ink: #283443;
-  --gold: #94754a;
+  --gold: #765b37;
   --line: #ddd7ce;
   --scroll-track: #f1ede7;
   --scroll-thumb: #ad9a81;
@@ -389,6 +389,7 @@ textarea:focus-visible {
     scroll-margin-top: 76px;
   }
   .hero {
+    height: auto;
     display: block;
     min-height: 0;
   }
