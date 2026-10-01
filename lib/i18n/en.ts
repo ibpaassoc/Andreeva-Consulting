@@ -192,12 +192,46 @@ export const en = {
     states: "states, different rules",
   },
   reviews: {
-    eyebrow: "Client stories",
-    title: "What our clients say",
+    eyebrow: "Client reviews",
+    title: "Real results for our clients",
+    description:
+      "Thank you for trusting us and letting us be part of your professional journey. These reviews speak to the work we do together.",
     previous: "Previous review",
     next: "Next review",
-    pending:
-      "Client testimonials will appear here once publication is approved.",
+    fiveStars: "Five stars",
+    position: "Review {current} of {total}",
+    viewAll: "View all reviews",
+    hideAll: "Hide review list",
+    galleryLabel: "All client reviews",
+    items: [
+      {
+        name: "Valeria",
+        credential: "Florida license · Cosmetology",
+        quote:
+          "I’m so glad I worked with people as responsible as you. I didn’t expect to get a result in such a short time. Thank you for your quick and reliable work!",
+        imageAlt: "Valeria holding her cosmetology license",
+      },
+      {
+        name: "Anastasiia",
+        credential: "Florida license · Cosmetology",
+        quote:
+          "I want to say a huge thank you for your work! I received my license without an exam and still can’t believe it’s real. You are true professionals!",
+        imageAlt: "Anastasiia’s review and Florida cosmetology license",
+      },
+      {
+        name: "Marina",
+        credential: "Florida license · Cosmetology",
+        quote:
+          "I’m very happy with our work together! Everything was explained, you helped gather the documents and were always in touch. I received my license without an exam. I wholeheartedly recommend you.",
+        imageAlt: "Marina’s review and Florida cosmetology license",
+      },
+      {
+        name: "Iuliia",
+        credential: "Florida license · Esthetician",
+        quote: "Thank you so much for your work. I still can’t believe it!",
+        imageAlt: "Iuliia’s review and Florida esthetician license",
+      },
+    ],
   },
   exam: {
     eyebrow: "A clear division of roles",
