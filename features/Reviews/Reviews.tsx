@@ -13,7 +13,7 @@ const images = [
   { src: "/images/reviews/IMG_1963.PNG", width: 940, height: 788 },
   { src: "/images/reviews/IMG_1964.PNG", width: 940, height: 788 },
   { src: "/images/reviews/IMG_1962.PNG", width: 940, height: 788 },
-  { src: "/images/reviews/photo_2_2026-10-01_15-02-34.jpg", width: 744, height: 1280, crop: "365 35 379 760", align: "xMidYMin slice" },
+  { src: "/images/reviews/IMG_1965.PNG", width: 940, height: 788, fit: "contain" },
   { src: "/images/reviews/IMG_1966.PNG", width: 940, height: 788 },
   { src: "/images/reviews/IMG_1967.PNG", width: 940, height: 788 },
 ] as const;
@@ -100,7 +100,7 @@ export default function Reviews({ lang }: { lang: Language }) {
         className={`review-feature-card${leaving ? " review-feature-card-outgoing" : ""}`}
         aria-hidden={leaving || undefined}
       >
-        <div className={`review-feature-image${"crop" in image ? " review-feature-crop" : ""}`}>
+        <div className={`review-feature-image${"crop" in image ? " review-feature-crop" : ""}${"fit" in image ? " review-feature-contain" : ""}`}>
           {"crop" in image ? (
             <svg
               viewBox={image.crop}

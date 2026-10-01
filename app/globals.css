@@ -848,7 +848,7 @@ body:has(.service-dialog[open]) {
 }
 .review-feature-image {
   position: relative;
-  min-height: 340px;
+  height: 340px;
   overflow: hidden;
   border-radius: 6px;
   background: #e8e0d4;
@@ -865,6 +865,9 @@ body:has(.service-dialog[open]) {
   display: block;
   width: 100%;
   height: 100%;
+}
+.review-feature-contain img {
+  object-fit: contain;
 }
 .review-feature-copy {
   position: relative;
@@ -953,7 +956,7 @@ body:has(.service-dialog[open]) {
     padding: 18px;
   }
   .review-feature-image {
-    min-height: 310px;
+    height: 310px;
   }
   .review-feature-copy blockquote {
     margin-top: 16px;
@@ -983,7 +986,7 @@ body:has(.service-dialog[open]) {
     grid-template-columns: minmax(0, 43%) minmax(0, 1fr);
   }
   .review-feature-image {
-    min-height: 370px;
+    height: 370px;
   }
   .review-feature-copy blockquote {
     font-size: 14px;

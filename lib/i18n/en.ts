@@ -232,11 +232,11 @@ export const en = {
         imageAlt: "Iuliia’s review and Florida esthetician license",
       },
       {
-        name: "Client",
-        credential: "California license · Cosmetology",
+        name: "Dzhelia",
+        credential: "Colorado license · Esthetician",
         quote:
-          "I want to express my sincere gratitude to you and your team for helping me obtain my license. Thank you for guiding me through every step and for your attentive support.",
-        imageAlt: "Client holding a California cosmetology license",
+          "I’m very happy with our work together! Everything was explained, you helped me gather the documents, and you were always in touch. I received my license without an exam. I wholeheartedly recommend you.",
+        imageAlt: "Dzhelia’s review and Colorado esthetician license",
       },
       {
         name: "Elizaveta",
