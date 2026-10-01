@@ -1220,6 +1220,17 @@ body:has(.service-dialog[open]) {
   font-size: 13px;
   text-decoration: none;
 }
+.footer-grid .footer-contact-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.footer-contact-link svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  color: #d8b98c;
+}
 .site-footer a:hover {
   color: #d8b98c;
 }
