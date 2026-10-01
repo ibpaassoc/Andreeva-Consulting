@@ -82,14 +82,25 @@ export default function Reviews({ lang }: { lang: Language }) {
         aria-hidden={leaving || undefined}
       >
         <div className={`review-feature-image${image.portrait ? " review-feature-portrait" : ""}`}>
-          <Image
-            src={image.src}
-            width={image.width}
-            height={image.height}
-            alt={leaving ? "" : review.imageAlt}
-            sizes="(max-width: 760px) 90vw, (max-width: 1100px) 32vw, 270px"
-            priority={reviewIndex === 0}
-          />
+          {image.portrait ? (
+            <svg
+              viewBox="188 366 576 470"
+              preserveAspectRatio="xMidYMid slice"
+              role="img"
+              aria-label={review.imageAlt}
+              focusable="false"
+            >
+              <image href={image.src} width={image.width} height={image.height} />
+            </svg>
+          ) : (
+            <Image
+              src={image.src}
+              width={image.width}
+              height={image.height}
+              alt={leaving ? "" : review.imageAlt}
+              sizes="(max-width: 760px) 90vw, (max-width: 1100px) 32vw, 270px"
+            />
+          )}
         </div>
         <div className="review-feature-copy">
           <span className="review-stars" aria-label={t.fiveStars}>★★★★★</span>
