@@ -5,13 +5,17 @@ export default function Footer({ lang }: { lang: Language }) {
   const t = getDictionary(lang).footer;
   const base = homePath(lang);
   const socials = [
-    ["Instagram", process.env.INSTAGRAM_URL],
+    [
+      "Instagram",
+      process.env.INSTAGRAM_URL ||
+        "https://www.instagram.com/andreeva__iuliia/",
+    ],
     ["Telegram", process.env.TELEGRAM_URL],
     ["WhatsApp", process.env.WHATSAPP_URL],
   ].filter((entry): entry is [string, string] =>
     Boolean(entry[1] && /^https:\/\//.test(entry[1])),
   );
-  const email = process.env.CONTACT_EMAIL;
+  const email = process.env.CONTACT_EMAIL || "support@andreevaconsulting.org";
 
   return (
     <footer id="contact" className="site-footer">
