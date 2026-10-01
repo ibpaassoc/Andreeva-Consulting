@@ -19,7 +19,6 @@ export default function Reviews({ lang }: { lang: Language }) {
   const t = getDictionary(lang).reviews;
   const [index, setIndex] = useState(0);
   const [outgoing, setOutgoing] = useState<number | null>(null);
-  const [isChanging, setIsChanging] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const showcaseRef = useRef<HTMLDivElement>(null);
@@ -36,7 +35,6 @@ export default function Reviews({ lang }: { lang: Language }) {
 
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         setOutgoing(null);
-        setIsChanging(false);
         return;
       }
 
@@ -48,7 +46,6 @@ export default function Reviews({ lang }: { lang: Language }) {
       const timeline = gsap.timeline({
         onComplete: () => {
           setOutgoing(null);
-          setIsChanging(false);
         },
       });
       timeline
@@ -61,10 +58,9 @@ export default function Reviews({ lang }: { lang: Language }) {
   );
 
   function selectReview(nextIndex: number) {
-    if (isChanging || nextIndex === index) return;
+    if (nextIndex === index) return;
     setOutgoing(index);
     setIndex(nextIndex);
-    setIsChanging(true);
   }
 
   function selectFromGallery(nextIndex: number) {
@@ -116,10 +112,10 @@ export default function Reviews({ lang }: { lang: Language }) {
           <h2 id="reviews-heading">{t.title}</h2>
           <p className="reviews-description">{t.description}</p>
           <div className="review-arrow-controls">
-            <button type="button" onClick={() => selectReview((index - 1 + t.items.length) % t.items.length)} disabled={isChanging} aria-label={t.previous}>
+            <button type="button" onClick={() => selectReview((index - 1 + t.items.length) % t.items.length)} aria-label={t.previous}>
               <span aria-hidden="true">←</span>
             </button>
-            <button type="button" onClick={() => selectReview((index + 1) % t.items.length)} disabled={isChanging} aria-label={t.next}>
+            <button type="button" onClick={() => selectReview((index + 1) % t.items.length)} aria-label={t.next}>
               <span aria-hidden="true">→</span>
             </button>
           </div>
@@ -152,7 +148,6 @@ export default function Reviews({ lang }: { lang: Language }) {
               className="reviews-gallery-item"
               aria-current={reviewIndex === index ? "true" : undefined}
               onClick={() => selectFromGallery(reviewIndex)}
-              disabled={isChanging}
             >
               <span className="reviews-gallery-number">0{reviewIndex + 1}</span>
               <span className="reviews-gallery-name">{review.name}</span>

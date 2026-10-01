@@ -783,10 +783,6 @@ body:has(.service-dialog[open]) {
   color: white;
   transform: translateY(-2px);
 }
-.review-arrow-controls button:disabled,
-.reviews-gallery-item:disabled {
-  cursor: wait;
-}
 .review-card-stack {
   position: relative;
   isolation: isolate;
