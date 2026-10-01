@@ -200,9 +200,9 @@ export const en = {
     next: "Next review",
     fiveStars: "Five stars",
     position: "Review {current} of {total}",
-    viewAll: "View all reviews",
-    hideAll: "Hide review list",
-    galleryLabel: "All client reviews",
+    carouselLabel: "Client reviews",
+    navigationHint: "Swipe left or right on a card, or use the arrow keys, to change reviews.",
+    swipeHint: "Swipe to browse reviews",
     items: [
       {
         name: "Valeria",
@@ -230,6 +230,27 @@ export const en = {
         credential: "Florida license · Esthetician",
         quote: "Thank you so much for your work. I still can’t believe it!",
         imageAlt: "Iuliia’s review and Florida esthetician license",
+      },
+      {
+        name: "Client",
+        credential: "California license · Cosmetology",
+        quote:
+          "I want to express my sincere gratitude to you and your team for helping me obtain my license. Thank you for guiding me through every step and for your attentive support.",
+        imageAlt: "Client holding a California cosmetology license",
+      },
+      {
+        name: "Elizaveta",
+        credential: "New York license · Cosmetology",
+        quote:
+          "The letter arrived! Does this mean my license was approved? I’m so shocked and happy that I can hardly believe it!",
+        imageAlt: "Elizaveta’s review and New York cosmetology license",
+      },
+      {
+        name: "Mariam",
+        credential: "New York license · Cosmetology",
+        quote:
+          "Good afternoon, Valeria! I have wonderful news: the letter confirming my license arrived! I can’t describe how happy I feel. Thank you so much!",
+        imageAlt: "Mariam’s review and New York cosmetology license",
       },
     ],
   },
