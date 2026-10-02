@@ -1155,15 +1155,15 @@ body:has(.service-dialog[open]) {
   align-items: start;
 }
 .faq-caption {
-  transition: transform 0.35s ease;
-}
-.faq-section.is-expanded .faq-caption {
   position: sticky;
-  top: calc(100svh - 245px);
-  align-self: end;
+  top: 122px;
+  align-self: start;
 }
 .faq-list {
   border-top: 1px solid var(--line);
+}
+.faq-extra-list {
+  overflow: hidden;
 }
 .faq-list details {
   border-bottom: 1px solid var(--line);
@@ -2033,7 +2033,7 @@ body:has(.service-dialog[open]) {
   .faq-section {
     padding-block: 62px;
   }
-  .faq-section.is-expanded .faq-caption {
+  .faq-caption {
     position: static;
   }
   .step {
