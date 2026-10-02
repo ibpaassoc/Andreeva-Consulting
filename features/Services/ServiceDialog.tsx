@@ -288,6 +288,11 @@ export default function ServiceDialog({
             </button>
           </div>
         </div>
+        <p className="service-dialog-swipe-hint" aria-hidden="true">
+          <span>←</span>
+          {t.previous} · {t.next}
+          <span>→</span>
+        </p>
         <div
           ref={contentRef}
           key={service.title}
@@ -323,11 +328,6 @@ export default function ServiceDialog({
           >
             {common.bookConsultation}
           </button>
-          <p className="service-dialog-swipe-hint" aria-hidden="true">
-            <span>←</span>
-            {t.previous} · {t.next}
-            <span>→</span>
-          </p>
         </div>
       </div>
     </dialog>

@@ -2249,9 +2249,9 @@ body:has(.service-dialog[open]) {
     align-items: center;
     justify-content: center;
     gap: 9px;
-    margin: 30px 0 0;
-    padding: 11px 14px;
-    border-top: 1px solid var(--line);
+    margin: -20px 0 24px;
+    padding: 9px 12px;
+    border-block: 1px solid var(--line);
     color: #807363;
     font-size: 10px;
     font-weight: 700;
