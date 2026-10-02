@@ -1698,6 +1698,16 @@ body:has(.service-dialog[open]) {
 .consultation-flow-content > .eyebrow {
   margin-bottom: 15px;
 }
+.consultation-calendar-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 15px;
+}
+.consultation-calendar-heading-row .eyebrow {
+  margin: 0;
+}
 .consultation-flow-content h2 {
   max-width: 760px;
   margin: 0;
@@ -1919,9 +1929,10 @@ body:has(.service-dialog[open]) {
   min-height: 650px !important;
   border: 0;
 }
-.consultation-flow-content > .cal-external-link {
+.consultation-calendar-heading-row .cal-external-link {
   display: inline-block;
-  margin-top: 20px;
+  padding-top: 0;
+  white-space: nowrap;
 }
 .site-footer {
   padding: 75px 0 30px;
@@ -2176,6 +2187,13 @@ body:has(.service-dialog[open]) {
   }
   .consultation-flow-lead {
     margin: 18px 0 26px;
+  }
+  .consultation-calendar-heading-row {
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .consultation-calendar-heading-row .eyebrow {
+    max-width: 150px;
   }
   .consultation-picker-option {
     grid-template-columns: 96px minmax(0, 1fr) 42px;

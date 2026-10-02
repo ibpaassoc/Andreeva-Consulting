@@ -370,7 +370,17 @@ function ConsultationFlowDialog({
             selected &&
             selectedIndex >= 0 && (
               <>
-                <p className="eyebrow">{t.calendarEyebrow}</p>
+                <div className="consultation-calendar-heading-row">
+                  <p className="eyebrow">{t.calendarEyebrow}</p>
+                  <a
+                    href={`https://cal.com/${selected.calLink}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cal-external-link"
+                  >
+                    {t.openCalendar} <span aria-hidden="true">↗</span>
+                  </a>
+                </div>
                 <h2
                   id="consultation-flow-title"
                   ref={headingRef}
@@ -386,7 +396,6 @@ function ConsultationFlowDialog({
                   <span>{t.items[selectedIndex].format}</span>
                   <span>{t.items[selectedIndex].price}</span>
                 </div>
-                <p className="consultation-flow-lead">{t.calendarLead}</p>
                 <div className="consultation-flow-calendar-shell">
                   <Cal
                     key={selected.key}
@@ -400,14 +409,6 @@ function ConsultationFlowDialog({
                     }}
                   />
                 </div>
-                <a
-                  href={`https://cal.com/${selected.calLink}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cal-external-link"
-                >
-                  {t.openCalendar} <span aria-hidden="true">↗</span>
-                </a>
               </>
             )
           )}
