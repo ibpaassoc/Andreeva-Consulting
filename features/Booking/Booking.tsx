@@ -147,6 +147,7 @@ export default function Booking({ lang }: { lang: Language }) {
         <div className="consultation-cards" aria-label={t.optionsLabel}>
           {consultations.map((consultation, index) => {
             const item = t.items[index];
+            const titleId = `consultation-card-title-${consultation.key}`;
 
             return (
               <article
@@ -159,7 +160,7 @@ export default function Booking({ lang }: { lang: Language }) {
                     <span>{item.topic}</span>
                     <span>{item.price}</span>
                   </div>
-                  <h3>{item.title}</h3>
+                  <h3 id={titleId}>{item.title}</h3>
                   <p className="consultation-description">{item.description}</p>
                   <div className="consultation-duration">
                     <BookingIcon type="video" />
@@ -172,15 +173,21 @@ export default function Booking({ lang }: { lang: Language }) {
                     <span aria-hidden="true">i</span>
                     {item.disclaimer}
                   </p>
-                  <button
-                    type="button"
+                  <span
                     className="button consultation-book-button"
-                    onClick={() => openCalendar(consultation.key)}
+                    aria-hidden="true"
                   >
                     <span>{item.button}</span>
                     <span aria-hidden="true">→</span>
-                  </button>
+                  </span>
                 </div>
+                <button
+                  type="button"
+                  className="consultation-card-trigger"
+                  aria-haspopup="dialog"
+                  aria-labelledby={titleId}
+                  onClick={() => openCalendar(consultation.key)}
+                />
               </article>
             );
           })}

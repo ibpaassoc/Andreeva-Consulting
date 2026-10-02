@@ -1326,6 +1326,8 @@ body:has(.service-dialog[open]) {
   align-items: stretch;
 }
 .consultation-card {
+  position: relative;
+  isolation: isolate;
   display: flex;
   min-width: 0;
   flex-direction: column;
@@ -1338,6 +1340,18 @@ body:has(.service-dialog[open]) {
     border-color 0.28s ease,
     box-shadow 0.28s ease,
     transform 0.28s ease;
+}
+.consultation-card-trigger {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.consultation-card-trigger:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: -6px;
 }
 .consultation-card:hover,
 .consultation-card:focus-within {
