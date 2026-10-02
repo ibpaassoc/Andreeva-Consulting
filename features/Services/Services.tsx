@@ -1,16 +1,21 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { getDictionary, type Language } from "@lib/i18n";
 import ServiceCard from "./ServiceCard";
+import ServiceDialog from "./ServiceDialog";
 
 gsap.registerPlugin(useGSAP);
 
 export default function Services({ lang }: { lang: Language }) {
   const t = getDictionary(lang).services;
   const sectionRef = useRef<HTMLElement>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [activeTrigger, setActiveTrigger] = useState<HTMLButtonElement | null>(
+    null,
+  );
 
   useGSAP(
     (_context, contextSafe) => {
@@ -71,10 +76,22 @@ export default function Services({ lang }: { lang: Language }) {
               service={service}
               index={index}
               lang={lang}
+              onOpen={(nextIndex, trigger) => {
+                setActiveTrigger(trigger);
+                setActiveIndex(nextIndex);
+              }}
             />
           ))}
         </div>
       </div>
+      <ServiceDialog
+        activeIndex={activeIndex}
+        lang={lang}
+        services={t.items}
+        trigger={activeTrigger}
+        onSelect={setActiveIndex}
+        onDismiss={() => setActiveIndex(null)}
+      />
     </section>
   );
 }

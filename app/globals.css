@@ -620,6 +620,26 @@ textarea:focus-visible {
   align-items: center;
   margin-bottom: 46px;
 }
+.service-dialog-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.service-dialog-actions > button {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--navy);
+  font-size: 20px;
+  cursor: pointer;
+}
+.service-dialog-actions > button:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
 .service-dialog-close {
   display: grid;
   place-items: center;

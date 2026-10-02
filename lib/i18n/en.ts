@@ -53,6 +53,8 @@ export const en = {
       "From your first document to an open studio. Explore a service to see the details.",
     more: "Learn more",
     close: "Close service details",
+    previous: "Previous service",
+    next: "Next service",
     includes: "What’s included",
     timing: "Timeline: ",
     needs: "What we need from you: ",
