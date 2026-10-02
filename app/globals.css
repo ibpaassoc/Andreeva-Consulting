@@ -1092,99 +1092,427 @@ body:has(.service-dialog[open]) {
   line-height: 1.7;
   font-size: 14px;
 }
-.booking-lead {
-  max-width: 700px;
-  margin: 20px 0 40px;
-  font-size: 16px;
-  line-height: 1.7;
+.booking-section {
+  position: relative;
+  overflow: clip;
+  background:
+    radial-gradient(circle at 12% 15%, rgba(190, 166, 130, 0.13), transparent 24%),
+    linear-gradient(135deg, #faf8f4 0%, var(--paper) 58%, #f3eee7 100%);
 }
-.booking-grid {
+.booking-section::before {
+  content: "";
+  position: absolute;
+  top: -180px;
+  right: -140px;
+  width: 460px;
+  height: 460px;
+  border: 1px solid rgba(118, 91, 55, 0.12);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.consultation-layout {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
-  gap: 20px;
+  grid-template-columns: minmax(250px, 0.48fr) minmax(0, 1.52fr);
+  gap: clamp(32px, 4.5vw, 76px);
   align-items: start;
 }
-.calendar-panel,
-.question-panel {
-  min-height: 420px;
-  padding: 30px;
-  border: 1px solid var(--line);
-  background: white;
+.consultation-intro {
+  position: sticky;
+  top: 130px;
 }
-.calendar-panel.calendar-pending {
-  min-height: 0;
+.booking-section h2 {
+  max-width: 430px;
+  font-size: clamp(48px, 4.4vw, 70px);
+  line-height: 0.96;
+  text-wrap: balance;
 }
-.calendar-panel h3,
-.question-panel h3 {
-  margin: 0 0 20px;
-  font-size: 34px;
+.booking-lead {
+  max-width: 410px;
+  margin: 25px 0 34px;
+  font-size: 15px;
+  line-height: 1.72;
 }
-.calendar-panel iframe {
-  display: block;
-  width: 100%;
-  min-height: 640px;
-  border: 0;
+.consultation-assurances {
+  max-width: 400px;
+  padding: 23px 0 0;
+  margin: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
 }
-.calendar-panel a {
+.consultation-assurances li {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.consultation-assurances li > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: #72747a;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.consultation-assurances strong {
   color: var(--navy);
+  font-size: 13px;
+  font-weight: 600;
 }
-.calendar-panel a:hover {
+.assurance-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(118, 91, 55, 0.18);
+  border-radius: 50%;
+  background: rgba(255, 254, 253, 0.7);
   color: var(--gold);
 }
-.configuration-note {
-  margin: 30px 0;
-  padding: 25px;
-  background: var(--ivory);
-  font-size: 14px;
+.assurance-icon svg,
+.consultation-duration svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+.assurance-icon svg {
+  width: 22px;
+  height: 22px;
+}
+.consultation-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 28px);
+}
+.consultation-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  border: 1px solid rgba(197, 182, 159, 0.58);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 254, 253, 0.95);
+  box-shadow: 0 22px 60px rgba(58, 44, 28, 0.08);
+  transition:
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    transform 0.28s ease;
+}
+.consultation-card:hover,
+.consultation-card:focus-within {
+  border-color: rgba(118, 91, 55, 0.68);
+  box-shadow: 0 28px 70px rgba(58, 44, 28, 0.12);
+  transform: translateY(-4px);
+}
+.consultation-card.is-selected {
+  border-color: var(--gold);
+  box-shadow:
+    0 0 0 2px rgba(118, 91, 55, 0.12),
+    0 28px 70px rgba(58, 44, 28, 0.13);
+}
+.consultation-art {
+  position: relative;
+  height: 205px;
+  flex: none;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(197, 182, 159, 0.5);
+}
+.consultation-art-license {
+  background:
+    radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.78), transparent 18%),
+    linear-gradient(135deg, #d8cfc2, #f2ede6 52%, #cdbda8);
+}
+.consultation-art-license::before {
+  content: "";
+  position: absolute;
+  top: 21px;
+  left: 15%;
+  width: 72%;
+  height: 230px;
+  border: 1px solid rgba(118, 91, 55, 0.32);
+  background: rgba(255, 254, 250, 0.9);
+  box-shadow: 0 18px 35px rgba(69, 54, 38, 0.16);
+  transform: rotate(2.5deg);
+}
+.license-kicker,
+.license-title,
+.license-rule,
+.license-seal {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  transform: translateX(-50%) rotate(2.5deg);
+}
+.license-kicker {
+  top: 49px;
+  color: var(--gold);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.license-title {
+  top: 72px;
+  width: 55%;
+  color: var(--navy);
+  font: 500 20px/0.95 var(--font-cormorant), Georgia, serif;
+  text-align: center;
+  text-transform: uppercase;
+}
+.license-rule {
+  width: 42%;
+  height: 1px;
+  background: rgba(118, 91, 55, 0.22);
+}
+.license-rule-one {
+  top: 124px;
+}
+.license-rule-two {
+  top: 138px;
+  width: 32%;
+}
+.license-seal {
+  top: 151px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px double rgba(118, 91, 55, 0.65);
+  border-radius: 50%;
+  color: var(--gold);
+  font: 600 12px var(--font-cormorant), Georgia, serif;
+}
+.consultation-art-immigration {
+  background:
+    linear-gradient(115deg, transparent 54%, rgba(255, 255, 255, 0.32) 55%, transparent 56%),
+    radial-gradient(circle at 72% 23%, rgba(255, 255, 255, 0.8), transparent 19%),
+    linear-gradient(145deg, #e7dfd3, #c9b9a4 50%, #eee8df);
+}
+.consultation-art-immigration::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 20%;
+  width: 54%;
+  height: 195px;
+  border: 1px solid #2d3542;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #17263a, #0d1725);
+  box-shadow: 0 20px 35px rgba(11, 20, 33, 0.25);
+  transform: rotate(-7deg);
+}
+.passport-mark,
+.passport-label,
+.passport-title {
+  position: absolute;
+  z-index: 1;
+  left: 47%;
+  color: #c9a76c;
+  transform: translateX(-50%) rotate(-7deg);
+}
+.passport-mark {
+  top: 64px;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font: 500 24px var(--font-cormorant), Georgia, serif;
+}
+.passport-label {
+  top: 126px;
+  font-size: 7px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.passport-title {
+  top: 151px;
+  font: 600 17px var(--font-cormorant), Georgia, serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.consultation-art-pen {
+  position: absolute;
+  right: 8%;
+  bottom: 4px;
+  z-index: 2;
+  width: 9px;
+  height: 176px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #785d38, #e1c696 35%, #80613a 65%, #d5b579);
+  box-shadow: 0 10px 15px rgba(65, 47, 28, 0.17);
+  transform: rotate(42deg);
+  transform-origin: bottom center;
+}
+.consultation-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: clamp(23px, 2.1vw, 32px);
+}
+.consultation-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 17px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.consultation-meta span:last-child {
+  flex: none;
+  padding: 6px 9px;
+  border: 1px solid rgba(118, 91, 55, 0.24);
+  border-radius: 999px;
+  background: #f8f4ed;
+  color: var(--navy);
+  letter-spacing: 0.06em;
+}
+.consultation-card h3 {
+  min-height: 3.75em;
+  margin: 0 0 17px;
+  font-size: clamp(29px, 2.2vw, 38px);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+.consultation-description {
+  min-height: 10.6em;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.62;
+}
+.consultation-duration {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 20px 0;
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.035em;
+}
+.consultation-duration svg {
+  width: 16px;
+  height: 16px;
+  color: var(--gold);
+}
+.consultation-duration span:nth-of-type(2) {
+  margin-inline: 2px;
+  color: #b2a99d;
+}
+.consultation-disclaimer {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 11px;
+  min-height: 98px;
+  align-items: center;
+  margin: 0 0 22px;
+  padding: 15px;
+  background: #f7f3ed;
+  color: #555c65;
+  font-size: 11px;
+  line-height: 1.55;
+}
+.consultation-disclaimer > span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  color: var(--gold);
+  font: 600 16px/1 var(--font-cormorant), Georgia, serif;
+}
+.consultation-book-button {
+  width: 100%;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-inline: 20px;
+  border-color: var(--gold);
+  background: var(--gold);
+  color: white;
+}
+.consultation-book-button:hover {
+  border-color: var(--navy);
+  background: var(--navy);
+}
+.consultation-card.is-selected .consultation-book-button {
+  border-color: var(--navy);
+  background: var(--navy);
+}
+.consultation-book-button > span:last-child {
+  font-size: 20px;
+  font-weight: 400;
+}
+.cal-booking-panel {
+  position: relative;
+  z-index: 1;
+  margin-top: 76px;
+  padding: clamp(26px, 4vw, 54px);
+  scroll-margin-top: 118px;
+  border: 1px solid rgba(197, 182, 159, 0.65);
+  border-radius: 12px;
+  background: rgba(255, 254, 253, 0.96);
+  box-shadow: 0 26px 75px rgba(58, 44, 28, 0.1);
+}
+.cal-booking-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 34px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--line);
+}
+.cal-booking-heading .eyebrow {
+  margin-bottom: 12px;
+}
+.cal-booking-heading h3 {
+  margin: 0;
+  font-size: clamp(34px, 3.2vw, 50px);
+  line-height: 1;
+}
+.cal-booking-heading h3:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 5px;
+}
+.cal-booking-heading p:last-child {
+  max-width: 700px;
+  margin: 13px 0 0;
+  font-size: 13px;
   line-height: 1.6;
 }
-.question-panel label {
-  display: block;
-  margin-bottom: 17px;
-  font-size: 12px;
-  font-weight: 700;
+.cal-external-link {
+  flex: none;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gold);
   color: var(--navy);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
 }
-.question-panel input,
-.question-panel textarea {
-  display: block;
-  width: 100%;
-  margin-top: 7px;
-  padding: 12px;
-  border: 1px solid var(--line);
-  border-radius: 0;
-  background: white;
-  color: var(--ink);
-  font:
-    14px var(--font-manrope),
-    sans-serif;
+.cal-external-link:hover {
+  color: var(--gold);
 }
-.question-panel textarea {
-  resize: none;
-  min-height: 130px;
-}
-.question-panel input[aria-invalid="true"],
-.question-panel textarea[aria-invalid="true"] {
-  border-color: #a43636;
-}
-.question-panel button[type="submit"] {
-  width: min(100%, 240px);
-}
-.question-panel button:disabled {
-  opacity: 0.6;
-  cursor: wait;
-}
-.form-status {
-  min-height: 25px;
-  font-size: 12px;
-  color: #a43636;
-}
-.honeypot {
-  position: absolute;
-  left: -10000px;
-  width: 1px;
-  height: 1px;
+.cal-embed-shell {
+  min-height: 680px;
+  padding-top: 28px;
   overflow: hidden;
+}
+.cal-inline-embed,
+.cal-inline-embed iframe {
+  width: 100% !important;
+  min-height: 680px !important;
+  border: 0;
 }
 .site-footer {
   padding: 75px 0 30px;
@@ -1270,13 +1598,31 @@ body:has(.service-dialog[open]) {
   background: var(--ivory);
   line-height: 1.75;
 }
+@media (max-width: 1160px) {
+  .consultation-layout {
+    grid-template-columns: 1fr;
+  }
+  .consultation-intro {
+    position: static;
+  }
+  .booking-section h2,
+  .booking-lead {
+    max-width: 690px;
+  }
+  .consultation-assurances {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    max-width: none;
+  }
+  .consultation-assurances li {
+    margin: 0;
+  }
+}
 @media (max-width: 950px) {
   .steps {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-  }
-  .booking-grid {
-    grid-template-columns: 1fr;
   }
 }
 @media (max-width: 760px) {
@@ -1299,12 +1645,84 @@ body:has(.service-dialog[open]) {
   .about-facts {
     gap: 26px;
   }
-  .calendar-panel,
-  .question-panel {
+  .booking-section::before {
+    width: 300px;
+    height: 300px;
+  }
+  .consultation-layout {
+    gap: 38px;
+  }
+  .booking-section h2 {
+    font-size: clamp(45px, 13vw, 61px);
+  }
+  .booking-lead {
+    margin-bottom: 28px;
+    font-size: 14px;
+  }
+  .consultation-assurances {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .consultation-cards {
+    grid-template-columns: 1fr;
+  }
+  .consultation-card:hover,
+  .consultation-card:focus-within {
+    transform: none;
+  }
+  .consultation-art {
+    height: 190px;
+  }
+  .consultation-card h3,
+  .consultation-description,
+  .consultation-disclaimer {
     min-height: 0;
-    padding: 20px;
+  }
+  .consultation-description {
+    font-size: 13px;
+  }
+  .consultation-disclaimer {
+    margin-top: 2px;
+  }
+  .cal-booking-panel {
+    margin-top: 52px;
+    padding: 22px;
+    scroll-margin-top: 88px;
+  }
+  .cal-booking-heading {
+    display: block;
+    padding-bottom: 22px;
+  }
+  .cal-external-link {
+    display: inline-block;
+    margin-top: 18px;
+  }
+  .cal-embed-shell {
+    min-height: 720px;
+    padding-top: 18px;
+  }
+  .cal-inline-embed,
+  .cal-inline-embed iframe {
+    min-height: 720px !important;
   }
   .footer-bottom {
     flex-direction: column;
+  }
+}
+@media (max-width: 390px) {
+  .consultation-card-body {
+    padding: 21px 18px 20px;
+  }
+  .consultation-meta {
+    align-items: flex-start;
+  }
+  .consultation-meta span:first-child {
+    max-width: 180px;
+  }
+  .consultation-book-button {
+    min-height: 54px;
+  }
+  .cal-booking-panel {
+    padding-inline: 16px;
   }
 }
