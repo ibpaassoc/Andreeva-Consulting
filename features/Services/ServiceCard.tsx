@@ -61,17 +61,18 @@ export default function ServiceCard({
       </span>
       <h3 id={titleId}>{service.title}</h3>
       <p>{service.teaser}</p>
+      <span className="text-action" aria-hidden="true">
+        <span>{t.more}</span>
+        <span aria-hidden="true">→</span>
+      </span>
       <button
         ref={triggerRef}
-        className="text-action"
+        className="service-card-trigger"
         type="button"
         aria-haspopup="dialog"
-        aria-labelledby={`${titleId} service-more-${index}`}
+        aria-label={`${service.title}. ${t.more}`}
         onClick={() => setOpen(true)}
-      >
-        <span id={`service-more-${index}`}>{t.more}</span>
-        <span aria-hidden="true">+</span>
-      </button>
+      />
 
       <dialog
         ref={dialogRef}
