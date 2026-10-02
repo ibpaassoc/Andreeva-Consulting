@@ -1,27 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Cal, { getCalApi } from "@calcom/embed-react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { getDictionary, type Language } from "@lib/i18n";
+import { useConsultationFlow } from "./ConsultationFlow";
+import { consultations, type ConsultationKey } from "./consultations";
 
 gsap.registerPlugin(useGSAP);
-
-const consultations = [
-  {
-    key: "license",
-    calLink: "iuliia-andreeva-ierhh1/20min",
-    namespace: "license-consultation",
-  },
-  {
-    key: "immigration",
-    calLink: "iuliia-andreeva-ierhh1/30min",
-    namespace: "immigration-consultation",
-  },
-] as const;
-
-type ConsultationKey = (typeof consultations)[number]["key"];
 
 function ConsultationArtwork({ type }: { type: ConsultationKey }) {
   if (type === "immigration") {
@@ -73,44 +59,8 @@ function BookingIcon({ type }: { type: "video" | "calendar" | "secure" }) {
 
 export default function Booking({ lang }: { lang: Language }) {
   const t = getDictionary(lang).booking;
-  const [selectedKey, setSelectedKey] = useState<ConsultationKey | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const bookingPanelRef = useRef<HTMLDivElement>(null);
-  const bookingHeadingRef = useRef<HTMLHeadingElement>(null);
-  const selected = consultations.find(({ key }) => key === selectedKey);
-  const selectedIndex = consultations.findIndex(({ key }) => key === selectedKey);
-
-  useEffect(() => {
-    if (!selected) return;
-    let cancelled = false;
-
-    void getCalApi({ namespace: selected.namespace })
-      .then((cal) => {
-        if (cancelled) return;
-        cal("ui", {
-          theme: "light",
-          layout: "month_view",
-          hideEventTypeDetails: false,
-          cssVarsPerTheme: {
-            light: {
-              "cal-brand": "#765b37",
-              "cal-brand-emphasis": "#5e472b",
-              "cal-brand-text": "#ffffff",
-            },
-            dark: {
-              "cal-brand": "#765b37",
-              "cal-brand-emphasis": "#5e472b",
-              "cal-brand-text": "#ffffff",
-            },
-          },
-        });
-      })
-      .catch(() => undefined);
-
-    return () => {
-      cancelled = true;
-    };
-  }, [selected]);
+  const { openCalendar } = useConsultationFlow();
 
   useGSAP(
     (_context, contextSafe) => {
@@ -148,36 +98,6 @@ export default function Booking({ lang }: { lang: Language }) {
       return () => media.revert();
     },
     { scope: sectionRef },
-  );
-
-  useGSAP(
-    () => {
-      if (!selectedKey || !bookingPanelRef.current) return;
-
-      const reducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      const tween = reducedMotion
-        ? null
-        : gsap.fromTo(
-            bookingPanelRef.current,
-            { y: 24, autoAlpha: 0 },
-            { y: 0, autoAlpha: 1, duration: 0.5, ease: "power3.out" },
-          );
-      const focusTimer = window.setTimeout(() => {
-        bookingHeadingRef.current?.focus({ preventScroll: true });
-        bookingPanelRef.current?.scrollIntoView({
-          behavior: reducedMotion ? "auto" : "smooth",
-          block: "start",
-        });
-      }, reducedMotion ? 0 : 180);
-
-      return () => {
-        tween?.kill();
-        window.clearTimeout(focusTimer);
-      };
-    },
-    { scope: sectionRef, dependencies: [selectedKey], revertOnUpdate: true },
   );
 
   return (
@@ -227,12 +147,11 @@ export default function Booking({ lang }: { lang: Language }) {
         <div className="consultation-cards" aria-label={t.optionsLabel}>
           {consultations.map((consultation, index) => {
             const item = t.items[index];
-            const isSelected = consultation.key === selectedKey;
 
             return (
               <article
                 key={consultation.key}
-                className={`consultation-card consultation-card-${consultation.key}${isSelected ? " is-selected" : ""}`}
+                className={`consultation-card consultation-card-${consultation.key}`}
               >
                 <ConsultationArtwork type={consultation.key} />
                 <div className="consultation-card-body">
@@ -253,62 +172,26 @@ export default function Booking({ lang }: { lang: Language }) {
                     <span aria-hidden="true">i</span>
                     {item.disclaimer}
                   </p>
-                  <button
-                    type="button"
+                  <span
                     className="button consultation-book-button"
-                    onClick={() => setSelectedKey(consultation.key)}
+                    aria-hidden="true"
                   >
-                    <span>{isSelected ? t.selectedButton : item.button}</span>
+                    <span>{item.button}</span>
                     <span aria-hidden="true">→</span>
-                  </button>
+                  </span>
                 </div>
+                <button
+                  type="button"
+                  className="consultation-card-trigger"
+                  aria-haspopup="dialog"
+                  aria-label={`${item.title}. ${item.button}`}
+                  onClick={() => openCalendar(consultation.key)}
+                />
               </article>
             );
           })}
         </div>
       </div>
-
-      {selected && selectedIndex >= 0 && (
-        <div
-          ref={bookingPanelRef}
-          className="page-shell cal-booking-panel"
-          aria-labelledby="cal-booking-title"
-        >
-          <div className="cal-booking-heading">
-            <div>
-              <p className="eyebrow">{t.calendarEyebrow}</p>
-              <h3 id="cal-booking-title" ref={bookingHeadingRef} tabIndex={-1}>
-                {t.calendarTitle.replace(
-                  "{consultation}",
-                  t.items[selectedIndex].shortTitle,
-                )}
-              </h3>
-              <p>{t.calendarLead}</p>
-            </div>
-            <a
-              href={`https://cal.com/${selected.calLink}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cal-external-link"
-            >
-              {t.openCalendar} <span aria-hidden="true">↗</span>
-            </a>
-          </div>
-          <div className="cal-embed-shell">
-            <Cal
-              key={selected.key}
-              namespace={selected.namespace}
-              calLink={selected.calLink}
-              className="cal-inline-embed"
-              config={{
-                layout: "month_view",
-                theme: "light",
-                "ui.color-scheme": "light",
-              }}
-            />
-          </div>
-        </div>
-      )}
     </section>
   );
 }

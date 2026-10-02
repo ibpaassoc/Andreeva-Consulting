@@ -53,6 +53,9 @@ export const en = {
       "From your first document to an open studio. Explore a service to see the details.",
     more: "Learn more",
     close: "Close service details",
+    previous: "Previous service",
+    next: "Next service",
+    dragToClose: "Swipe down to close service details",
     includes: "What’s included",
     timing: "Timeline: ",
     needs: "What we need from you: ",
@@ -265,6 +268,8 @@ export const en = {
   },
   faq: {
     title: "Frequently asked questions",
+    showMore: "See more questions",
+    showLess: "Show fewer questions",
     questions: [
       [
         "Will my education and experience from outside the U.S. count?",
@@ -312,6 +317,12 @@ export const en = {
     eyebrow: "Consultations",
     title: "Choose the right consultation",
     lead: "Select the topic that matches your goal, then choose a convenient time directly in our secure Cal.com calendar.",
+    pickerEyebrow: "Start your booking",
+    pickerLead:
+      "Choose the conversation that fits your goal. You’ll select an available date and time next.",
+    close: "Close consultation booking",
+    dragToClose: "Swipe down to close consultation booking",
+    backToOptions: "Consultation types",
     optionsLabel: "Consultation options",
     assurances: {
       online: {
