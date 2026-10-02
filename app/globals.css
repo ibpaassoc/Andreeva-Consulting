@@ -1797,6 +1797,19 @@ body:has(.service-dialog[open]) {
     var(--paper);
   box-shadow: -20px 0 70px rgba(20, 38, 58, 0.2);
 }
+.consultation-flow-panel.consultation-flow-panel-calendar {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.consultation-flow-panel-calendar .consultation-flow-content {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  padding-bottom: 0;
+  overflow: hidden;
+}
 .consultation-flow-topline {
   position: sticky;
   top: 0;
@@ -2077,11 +2090,20 @@ body:has(.service-dialog[open]) {
   border-top: 1px solid var(--line);
   overflow: hidden;
 }
+.consultation-flow-panel-calendar .consultation-flow-calendar-shell {
+  min-height: 0;
+  flex: 1;
+}
 .consultation-flow-calendar,
 .consultation-flow-calendar iframe {
   width: 100% !important;
   min-height: 650px !important;
   border: 0;
+}
+.consultation-flow-panel-calendar .consultation-flow-calendar,
+.consultation-flow-panel-calendar .consultation-flow-calendar iframe {
+  height: 100% !important;
+  min-height: 0 !important;
 }
 .consultation-calendar-heading-row .cal-external-link {
   display: inline-block;
@@ -2459,11 +2481,6 @@ body:has(.service-dialog[open]) {
   }
   .consultation-flow-calendar-meta span + span::before {
     margin-right: 14px;
-  }
-  .consultation-flow-calendar-shell,
-  .consultation-flow-calendar,
-  .consultation-flow-calendar iframe {
-    min-height: 720px !important;
   }
   .footer-bottom {
     flex-direction: column;
