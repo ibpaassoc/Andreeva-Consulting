@@ -8,7 +8,7 @@ export const en = {
     privacyTitle: "Privacy policy | Andreeva Consulting",
   },
   common: {
-    bookConsultation: "Book a free consultation",
+    bookConsultation: "Choose a consultation",
     brandHome: "Andreeva Consulting — Home",
     founderImage: "Andreeva Consulting founder",
   },
@@ -152,7 +152,7 @@ export const en = {
     title: "How we work",
     steps: [
       [
-        "Free consultation",
+        "Consultation",
         "We review your credentials and experience, check state requirements, and discuss what is realistic.",
       ],
       [
@@ -309,28 +309,57 @@ export const en = {
     ],
   },
   booking: {
-    eyebrow: "Free consultation",
-    title: "Let’s review your documents",
-    lead: "In 30 minutes, we’ll discuss your education and experience, state requirements, and possible next steps. Online, with no obligation.",
-    chooseTime: "Choose a time",
-    calendarTitle: "Free consultation booking calendar",
-    openCalendar: "Open calendar in a new tab",
-    calendarPending:
-      "Online scheduling will appear here once the company calendar is connected.",
-    questionEyebrow: "Have a question?",
-    questionTitle: "Send us a note",
-    name: "Name",
-    contact: "Email or phone",
-    question: "Your question",
-    website: "Website",
-    missingFields: "Enter your name, contact details, and question.",
-    challengeRequired: "Complete the verification before sending.",
-    sendError: "Message not sent. Please try again later.",
-    sent: "Message sent.",
-    sending: "Sending…",
-    send: "Send question",
-    formPending:
-      "The question form will be available once the work email is connected and the privacy policy is approved.",
+    eyebrow: "Consultations",
+    title: "Choose the right consultation",
+    lead: "Select the topic that matches your goal, then choose a convenient time directly in our secure Cal.com calendar.",
+    optionsLabel: "Consultation options",
+    assurances: {
+      online: {
+        title: "Online meeting",
+        detail: "Join from anywhere",
+      },
+      schedule: {
+        title: "A focused conversation",
+        detail: "20 or 30 minutes",
+      },
+      calcom: {
+        title: "Booking through Cal.com",
+        detail: "Scheduling and payment in one place",
+      },
+    },
+    items: [
+      {
+        topic: "U.S. beauty licenses",
+        price: "Free",
+        title: "Information consultation on U.S. beauty licenses",
+        shortTitle: "beauty licenses",
+        description:
+          "General information about the process for obtaining professional licenses for beauty industry professionals, the application stages, and our document translation, organization, and technical preparation services.",
+        disclaimer:
+          "We do not provide legal advice. The licensing authority in the relevant state decides whether to issue a license.",
+        format: "Online",
+        duration: "20 minutes",
+        button: "Book a free consultation",
+      },
+      {
+        topic: "Immigration categories",
+        price: "$100",
+        title: "Information consultation on EB‑1A and O‑1 for beauty professionals",
+        shortTitle: "EB‑1A and O‑1",
+        description:
+          "General information about the EB‑1A and O‑1 categories and our document translation and organization services. An individual legal assessment is conducted by an immigration attorney.",
+        disclaimer: "I am not an attorney and do not provide legal advice.",
+        format: "Online",
+        duration: "30 minutes",
+        button: "Book for $100",
+      },
+    ],
+    selectedButton: "Calendar selected",
+    calendarEyebrow: "Schedule with Cal.com",
+    calendarTitle: "Book your {consultation} consultation",
+    calendarLead:
+      "Choose an available date and time below. Cal.com handles the remaining booking steps and payment when applicable.",
+    openCalendar: "Open in a new tab",
   },
   footer: {
     tagline: "Helping beauty professionals work legally in the U.S.",
