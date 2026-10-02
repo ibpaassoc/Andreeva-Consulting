@@ -330,13 +330,33 @@ function ConsultationFlowDialog({
                         })
                       }
                     >
-                      <span className="consultation-picker-meta">
-                        <span>{item.topic}</span>
-                        <span>{item.price}</span>
+                      <span
+                        className={`consultation-picker-art consultation-picker-art-${consultation.key}`}
+                        aria-hidden="true"
+                      >
+                        {consultation.key === "license" ? (
+                          <>
+                            <span className="picker-license-tools" />
+                            <span className="picker-license-vessel" />
+                            <span className="picker-license-mirror" />
+                          </>
+                        ) : (
+                          <>
+                            <span className="picker-passport-monogram">AC</span>
+                            <span className="picker-passport-label">Passport</span>
+                            <span className="picker-passport-paper" />
+                          </>
+                        )}
                       </span>
-                      <strong>{item.title}</strong>
-                      <span className="consultation-picker-duration">
-                        {item.format} · {item.duration}
+                      <span className="consultation-picker-copy">
+                        <span className="consultation-picker-meta">
+                          <span>{item.topic}</span>
+                          <span>{item.price}</span>
+                        </span>
+                        <strong>{item.title}</strong>
+                        <span className="consultation-picker-duration">
+                          {item.format} · {item.duration}
+                        </span>
                       </span>
                       <span className="consultation-picker-arrow" aria-hidden="true">
                         →
