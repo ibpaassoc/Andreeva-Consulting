@@ -9,10 +9,11 @@ import Reviews from "./Reviews/Reviews";
 import ExamStates from "./ExamStates";
 import FAQ from "./FAQ";
 import Booking from "./Booking/Booking";
+import { ConsultationFlowProvider } from "./Booking/ConsultationFlow";
 
 export default function HomePage({ lang }: { lang: Language }) {
   return (
-    <>
+    <ConsultationFlowProvider lang={lang}>
       <Header lang={lang} />
       <main>
         <Hero lang={lang} />
@@ -26,6 +27,6 @@ export default function HomePage({ lang }: { lang: Language }) {
         <Booking lang={lang} />
       </main>
       <Footer lang={lang} />
-    </>
+    </ConsultationFlowProvider>
   );
 }

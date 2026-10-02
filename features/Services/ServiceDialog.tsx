@@ -3,8 +3,9 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { homePath } from "@config/navigation";
 import { getDictionary, type Language, type Service } from "@lib/i18n";
+import { useBottomSheetDrag } from "@shared/useBottomSheetDrag";
+import { useConsultationFlow } from "@features/Booking/ConsultationFlow";
 
 gsap.registerPlugin(useGSAP);
 
@@ -28,44 +29,49 @@ export default function ServiceDialog({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const closeDialogRef = useRef<() => void>(() => undefined);
   const { services: t, common } = getDictionary(lang);
+  const { openPicker } = useConsultationFlow();
   const service = activeIndex === null ? null : services[activeIndex];
   const reducedMotion = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  useGSAP(
-    (_context, contextSafe) => {
-      closeDialogRef.current = contextSafe(() => {
-        const dialog = dialogRef.current;
-        const panel = panelRef.current;
-        if (!dialog?.open) return;
+  const { contextSafe } = useGSAP({ scope: dialogRef });
+  const animateClose = contextSafe(
+    (dialog: HTMLDialogElement, panel: HTMLDivElement) => {
+      if (!dialog.open) return;
+      if (reducedMotion()) {
+        dialog.close();
+        return;
+      }
 
-        if (reducedMotion() || !panel) {
-          dialog.close();
-          return;
-        }
-
-        gsap.to(panel, {
-          x: 42,
-          autoAlpha: 0,
-          duration: 0.28,
-          ease: "power2.in",
-          overwrite: "auto",
-          onComplete: () => dialog.close(),
-        });
+      const mobile = window.matchMedia("(max-width: 760px)").matches;
+      gsap.to(panel, {
+        x: mobile ? 0 : 42,
+        yPercent: mobile ? 104 : 0,
+        autoAlpha: 0,
+        duration: 0.28,
+        ease: "power2.in",
+        overwrite: "auto",
+        onComplete: () => dialog.close(),
       });
-
-      return () => {
-        closeDialogRef.current = () => undefined;
-      };
     },
-    { scope: dialogRef },
   );
 
   function closeDialog() {
-    closeDialogRef.current();
+    const dialog = dialogRef.current;
+    const panel = panelRef.current;
+    if (dialog && panel) animateClose(dialog, panel);
   }
+
+  function continueToConsultation() {
+    closeDialog();
+    window.setTimeout(openPicker, reducedMotion() ? 0 : 320);
+  }
+
+  const dragHandlers = useBottomSheetDrag(
+    panelRef,
+    () => dialogRef.current?.close(),
+  );
 
   useGSAP(
     () => {
@@ -76,11 +82,17 @@ export default function ServiceDialog({
       if (!dialog.open) {
         dialog.showModal();
         if (!reducedMotion()) {
+          const mobile = window.matchMedia("(max-width: 760px)").matches;
           gsap.fromTo(
             panel,
-            { x: 46, autoAlpha: 0 },
+            {
+              x: mobile ? 0 : 46,
+              yPercent: mobile ? 104 : 0,
+              autoAlpha: 0,
+            },
             {
               x: 0,
+              yPercent: 0,
               autoAlpha: 1,
               duration: 0.44,
               ease: "power3.out",
@@ -90,7 +102,11 @@ export default function ServiceDialog({
         }
       }
     },
-    { scope: dialogRef, dependencies: [activeIndex] },
+    {
+      scope: dialogRef,
+      dependencies: [activeIndex],
+      revertOnUpdate: true,
+    },
   );
 
   useGSAP(
@@ -139,7 +155,21 @@ export default function ServiceDialog({
         if (event.target === event.currentTarget) closeDialog();
       }}
     >
+      <button
+        type="button"
+        className="service-dialog-scrim"
+        aria-hidden="true"
+        tabIndex={-1}
+        onClick={closeDialog}
+      />
       <div ref={panelRef} className="service-dialog-panel">
+        <div
+          className="bottom-sheet-handle"
+          aria-label={t.dragToClose}
+          {...dragHandlers}
+        >
+          <span />
+        </div>
         <div className="service-dialog-topline">
           <span className="service-number">
             {String(activeIndex + 1).padStart(2, "0")} / {String(services.length).padStart(2, "0")}
@@ -186,13 +216,13 @@ export default function ServiceDialog({
             <strong>{t.needs}</strong>
             {service.needs}
           </p>
-          <a
+          <button
+            type="button"
             className="button button-primary"
-            href={`${homePath(lang)}#booking`}
-            onClick={closeDialog}
+            onClick={continueToConsultation}
           >
             {common.bookConsultation}
-          </a>
+          </button>
         </div>
       </div>
     </dialog>

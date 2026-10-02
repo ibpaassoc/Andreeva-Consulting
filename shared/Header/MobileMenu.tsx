@@ -4,12 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { homePath, navigation } from "@config/navigation";
 import { getDictionary, type Language } from "@lib/i18n";
+import { useConsultationFlow } from "@features/Booking/ConsultationFlow";
 
 export default function MobileMenu({ lang }: { lang: Language }) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const { mobileMenu: t, common, navigation: navCopy } = getDictionary(lang);
   const links = navigation(lang);
+  const { openPicker } = useConsultationFlow();
 
   useEffect(() => {
     if (!open) return;
@@ -61,13 +63,16 @@ export default function MobileMenu({ lang }: { lang: Language }) {
                 </span>
               </Link>
             ))}
-            <Link
+            <button
+              type="button"
               className="button button-primary"
-              href={`${homePath(lang)}#booking`}
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setOpen(false);
+                openPicker();
+              }}
             >
               {common.bookConsultation}
-            </Link>
+            </button>
           </div>
         </nav>
       )}

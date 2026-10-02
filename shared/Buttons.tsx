@@ -1,5 +1,7 @@
+"use client";
+
 import { getDictionary, type Language } from "@lib/i18n";
-import { homePath } from "@config/navigation";
+import { useConsultationFlow } from "@features/Booking/ConsultationFlow";
 
 interface BookConsultationButtonProps {
   lang: Language;
@@ -9,10 +11,15 @@ export default function BookConsultationButton({
   lang,
 }: BookConsultationButtonProps) {
   const t = getDictionary(lang);
+  const { openPicker } = useConsultationFlow();
 
   return (
-    <a href={`${homePath(lang)}#booking`} className="button button-primary">
+    <button
+      type="button"
+      className="button button-primary"
+      onClick={openPicker}
+    >
       {t.common.bookConsultation}
-    </a>
+    </button>
   );
 }

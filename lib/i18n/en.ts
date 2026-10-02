@@ -55,6 +55,7 @@ export const en = {
     close: "Close service details",
     previous: "Previous service",
     next: "Next service",
+    dragToClose: "Swipe down to close service details",
     includes: "What’s included",
     timing: "Timeline: ",
     needs: "What we need from you: ",
@@ -316,6 +317,12 @@ export const en = {
     eyebrow: "Consultations",
     title: "Choose the right consultation",
     lead: "Select the topic that matches your goal, then choose a convenient time directly in our secure Cal.com calendar.",
+    pickerEyebrow: "Start your booking",
+    pickerLead:
+      "Choose the conversation that fits your goal. You’ll select an available date and time next.",
+    close: "Close consultation booking",
+    dragToClose: "Swipe down to close consultation booking",
+    backToOptions: "Consultation types",
     optionsLabel: "Consultation options",
     assurances: {
       online: {
