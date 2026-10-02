@@ -215,6 +215,11 @@ textarea:focus-visible {
   letter-spacing: 0.26em;
   text-transform: uppercase;
 }
+.sticky-caption {
+  position: sticky;
+  top: 122px;
+  align-self: start;
+}
 .hero h1 {
   margin: 0;
   font-size: clamp(56px, 4.6vw, 88px);
