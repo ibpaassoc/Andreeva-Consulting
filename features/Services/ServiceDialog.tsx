@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type PointerEvent } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { getDictionary, type Language, type Service } from "@lib/i18n";
@@ -29,6 +29,13 @@ export default function ServiceDialog({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const swipeStartRef = useRef<{
+    id: number;
+    x: number;
+    y: number;
+  } | null>(null);
+  const swipeDirectionRef = useRef(1);
+  const swipeTweenRef = useRef<gsap.core.Tween | null>(null);
   const { services: t, common } = getDictionary(lang);
   const { openPicker } = useConsultationFlow();
   const service = activeIndex === null ? null : services[activeIndex];
@@ -114,7 +121,7 @@ export default function ServiceDialog({
       if (activeIndex === null || !contentRef.current || reducedMotion()) return;
       gsap.fromTo(
         contentRef.current,
-        { x: 16, autoAlpha: 0 },
+        { x: 18 * swipeDirectionRef.current, autoAlpha: 0 },
         {
           x: 0,
           autoAlpha: 1,
@@ -131,12 +138,94 @@ export default function ServiceDialog({
     },
   );
 
+  useGSAP(
+    () => () => swipeTweenRef.current?.kill(),
+    { scope: dialogRef },
+  );
+
   if (!service || activeIndex === null) return null;
 
   const previousIndex =
     (activeIndex - 1 + services.length) % services.length;
   const nextIndex = (activeIndex + 1) % services.length;
   const dialogTitleId = "service-dialog-title";
+
+  function selectService(nextServiceIndex: number, direction: number) {
+    swipeDirectionRef.current = direction;
+    onSelect(nextServiceIndex);
+  }
+
+  function resetSwipe() {
+    const content = contentRef.current;
+    if (!content) return;
+    swipeTweenRef.current?.kill();
+    swipeTweenRef.current = gsap.to(content, {
+      x: 0,
+      autoAlpha: 1,
+      duration: reducedMotion() ? 0 : 0.25,
+      ease: "power2.out",
+      overwrite: "auto",
+      clearProps: "transform,opacity,visibility",
+    });
+  }
+
+  function handleSwipeStart(event: PointerEvent<HTMLDivElement>) {
+    if (
+      !window.matchMedia("(max-width: 760px)").matches ||
+      event.pointerType === "mouse" ||
+      (event.target as Element).closest("button, a")
+    ) {
+      return;
+    }
+    swipeStartRef.current = {
+      id: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function handleSwipeMove(event: PointerEvent<HTMLDivElement>) {
+    const start = swipeStartRef.current;
+    const content = contentRef.current;
+    if (!start || start.id !== event.pointerId || !content) return;
+
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    if (Math.abs(dx) <= Math.abs(dy)) return;
+    gsap.set(content, { x: dx * 0.72 });
+  }
+
+  function handleSwipeEnd(event: PointerEvent<HTMLDivElement>) {
+    const start = swipeStartRef.current;
+    swipeStartRef.current = null;
+    if (!start || start.id !== event.pointerId) return;
+
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    if (Math.abs(dx) < 64 || Math.abs(dx) < Math.abs(dy) * 1.2) {
+      resetSwipe();
+      return;
+    }
+
+    const direction = dx < 0 ? 1 : -1;
+    const nextServiceIndex = direction > 0 ? nextIndex : previousIndex;
+    const content = contentRef.current;
+    if (!content || reducedMotion()) {
+      selectService(nextServiceIndex, direction);
+      return;
+    }
+
+    swipeTweenRef.current?.kill();
+    swipeTweenRef.current = gsap.to(content, {
+      x: direction > 0 ? -96 : 96,
+      autoAlpha: 0,
+      duration: 0.2,
+      ease: "power2.in",
+      overwrite: "auto",
+      onComplete: () => selectService(nextServiceIndex, direction),
+    });
+  }
 
   return (
     <dialog
@@ -178,14 +267,14 @@ export default function ServiceDialog({
             <button
               type="button"
               aria-label={t.previous}
-              onClick={() => onSelect(previousIndex)}
+              onClick={() => selectService(previousIndex, -1)}
             >
               <span aria-hidden="true">←</span>
             </button>
             <button
               type="button"
               aria-label={t.next}
-              onClick={() => onSelect(nextIndex)}
+              onClick={() => selectService(nextIndex, 1)}
             >
               <span aria-hidden="true">→</span>
             </button>
@@ -199,7 +288,18 @@ export default function ServiceDialog({
             </button>
           </div>
         </div>
-        <div ref={contentRef} key={service.title}>
+        <div
+          ref={contentRef}
+          key={service.title}
+          className="service-dialog-content"
+          onPointerDown={handleSwipeStart}
+          onPointerMove={handleSwipeMove}
+          onPointerUp={handleSwipeEnd}
+          onPointerCancel={() => {
+            swipeStartRef.current = null;
+            resetSwipe();
+          }}
+        >
           <h2 id={dialogTitleId}>{service.title}</h2>
           <p className="service-dialog-intro">{service.intro}</p>
           <h3>{t.includes}</h3>
@@ -223,6 +323,11 @@ export default function ServiceDialog({
           >
             {common.bookConsultation}
           </button>
+          <p className="service-dialog-swipe-hint" aria-hidden="true">
+            <span>←</span>
+            {t.previous} · {t.next}
+            <span>→</span>
+          </p>
         </div>
       </div>
     </dialog>
