@@ -6,7 +6,7 @@ export default function Audience({ lang }: { lang: Language }) {
   return (
     <section className="section audience-section">
       <div className="page-shell split-section">
-        <div>
+        <div className="sticky-caption">
           <p className="eyebrow">{t.eyebrow}</p>
           <h2>{t.title}</h2>
         </div>

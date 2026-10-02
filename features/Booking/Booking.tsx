@@ -119,8 +119,7 @@ export default function Booking({ lang }: { lang: Language }) {
                 <BookingIcon type="video" />
               </span>
               <span>
-                <strong>{t.assurances.online.title}</strong>
-                {t.assurances.online.detail}
+                <strong>{t.assurances.online}</strong>
               </span>
             </li>
             <li>
@@ -128,8 +127,7 @@ export default function Booking({ lang }: { lang: Language }) {
                 <BookingIcon type="calendar" />
               </span>
               <span>
-                <strong>{t.assurances.schedule.title}</strong>
-                {t.assurances.schedule.detail}
+                <strong>{t.assurances.schedule}</strong>
               </span>
             </li>
             <li>
@@ -137,8 +135,7 @@ export default function Booking({ lang }: { lang: Language }) {
                 <BookingIcon type="secure" />
               </span>
               <span>
-                <strong>{t.assurances.calcom.title}</strong>
-                {t.assurances.calcom.detail}
+                <strong>{t.assurances.obligation}</strong>
               </span>
             </li>
           </ul>
@@ -147,6 +144,7 @@ export default function Booking({ lang }: { lang: Language }) {
         <div className="consultation-cards" aria-label={t.optionsLabel}>
           {consultations.map((consultation, index) => {
             const item = t.items[index];
+            const titleId = `consultation-card-title-${consultation.key}`;
 
             return (
               <article
@@ -159,7 +157,7 @@ export default function Booking({ lang }: { lang: Language }) {
                     <span>{item.topic}</span>
                     <span>{item.price}</span>
                   </div>
-                  <h3>{item.title}</h3>
+                  <h3 id={titleId}>{item.title}</h3>
                   <p className="consultation-description">{item.description}</p>
                   <div className="consultation-duration">
                     <BookingIcon type="video" />
@@ -184,7 +182,7 @@ export default function Booking({ lang }: { lang: Language }) {
                   type="button"
                   className="consultation-card-trigger"
                   aria-haspopup="dialog"
-                  aria-label={`${item.title}. ${item.button}`}
+                  aria-label={item.button}
                   onClick={() => openCalendar(consultation.key)}
                 />
               </article>

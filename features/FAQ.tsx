@@ -93,7 +93,7 @@ export default function FAQ({ lang }: { lang: Language }) {
       className={`section faq-section${expanded ? " is-expanded" : ""}`}
     >
       <div className="page-shell split-section faq-layout">
-        <div className="faq-caption">
+        <div className="sticky-caption">
           <p className="eyebrow">FAQ</p>
           <h2>{t.title}</h2>
         </div>

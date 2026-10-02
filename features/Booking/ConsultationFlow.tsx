@@ -264,7 +264,12 @@ function ConsultationFlowDialog({
         tabIndex={-1}
         onClick={closeDialog}
       />
-      <div ref={panelRef} className="consultation-flow-panel">
+      <div
+        ref={panelRef}
+        className={`consultation-flow-panel${
+          flow.step === "calendar" ? " consultation-flow-panel-calendar" : ""
+        }`}
+      >
         <div
           className="bottom-sheet-handle"
           aria-label={t.dragToClose}

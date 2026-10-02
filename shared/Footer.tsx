@@ -63,7 +63,7 @@ export default function Footer({ lang }: { lang: Language }) {
                     <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
                   </svg>
                 )}
-                {label} ↗
+                {label}
               </a>
             ))}
             {email && (
