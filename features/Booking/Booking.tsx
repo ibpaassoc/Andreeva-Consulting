@@ -119,8 +119,7 @@ export default function Booking({ lang }: { lang: Language }) {
                 <BookingIcon type="video" />
               </span>
               <span>
-                <strong>{t.assurances.online.title}</strong>
-                {t.assurances.online.detail}
+                <strong>{t.assurances.online}</strong>
               </span>
             </li>
             <li>
@@ -128,8 +127,7 @@ export default function Booking({ lang }: { lang: Language }) {
                 <BookingIcon type="calendar" />
               </span>
               <span>
-                <strong>{t.assurances.schedule.title}</strong>
-                {t.assurances.schedule.detail}
+                <strong>{t.assurances.schedule}</strong>
               </span>
             </li>
             <li>
@@ -137,8 +135,7 @@ export default function Booking({ lang }: { lang: Language }) {
                 <BookingIcon type="secure" />
               </span>
               <span>
-                <strong>{t.assurances.calcom.title}</strong>
-                {t.assurances.calcom.detail}
+                <strong>{t.assurances.obligation}</strong>
               </span>
             </li>
           </ul>

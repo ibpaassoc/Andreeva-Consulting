@@ -315,8 +315,8 @@ export const en = {
   },
   booking: {
     eyebrow: "Consultations",
-    title: "Choose the right consultation",
-    lead: "Select the topic that matches your goal, then choose a convenient time directly in our secure Cal.com calendar.",
+    title: "Book the right consultation",
+    lead: "Get expert guidance on your specific topic in just a few simple steps",
     pickerEyebrow: "Start your booking",
     pickerLead:
       "Choose the conversation that fits your goal. You’ll select an available date and time next.",
@@ -325,18 +325,9 @@ export const en = {
     backToOptions: "Consultation types",
     optionsLabel: "Consultation options",
     assurances: {
-      online: {
-        title: "Online meeting",
-        detail: "Join from anywhere",
-      },
-      schedule: {
-        title: "A focused conversation",
-        detail: "20 or 30 minutes",
-      },
-      calcom: {
-        title: "Booking through Cal.com",
-        detail: "Scheduling and payment in one place",
-      },
+      online: "Online meeting",
+      schedule: "20-30 minutes",
+      obligation: "No obligation",
     },
     items: [
       {
@@ -366,7 +357,7 @@ export const en = {
       },
     ],
     selectedButton: "Calendar selected",
-    calendarEyebrow: "Schedule with Cal.com",
+    calendarEyebrow: "Schedule",
     calendarTitle: "Book your {consultation} consultation",
     calendarLead:
       "Choose an available date and time below. Cal.com handles the remaining booking steps and payment when applicable.",
