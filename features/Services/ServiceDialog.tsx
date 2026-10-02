@@ -172,7 +172,6 @@ export default function ServiceDialog({
   function handleSwipeStart(event: PointerEvent<HTMLDivElement>) {
     if (
       !window.matchMedia("(max-width: 760px)").matches ||
-      event.pointerType === "mouse" ||
       (event.target as Element).closest("button, a")
     ) {
       return;
