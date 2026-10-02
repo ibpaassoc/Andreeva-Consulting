@@ -2263,7 +2263,7 @@ body:has(.service-dialog[open]) {
     font-size: 17px;
     font-weight: 400;
   }
-  .service-dialog-close,
+  .service-dialog-actions > .service-dialog-close,
   .consultation-flow-close {
     display: none;
   }
