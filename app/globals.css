@@ -723,20 +723,60 @@ body:has(.service-dialog[open]) {
 }
 @media (max-width: 760px) {
   .section {
-    padding: 72px 0;
+    position: relative;
+    isolation: isolate;
+    padding: 80px 0;
+    border-top: 1px solid rgba(118, 91, 55, 0.12);
+    overflow: clip;
+  }
+  main > .section:nth-of-type(even) {
+    background: #f3eee7;
+  }
+  main > .section:not(.booking-section)::after {
+    content: "";
+    position: absolute;
+    top: 24px;
+    z-index: 0;
+    width: 88px;
+    height: 88px;
+    border: 1px solid rgba(118, 91, 55, 0.14);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  main > .section > .page-shell {
+    position: relative;
+    z-index: 1;
+  }
+  main > .section:nth-of-type(odd)::after {
+    right: -52px;
+  }
+  main > .section:nth-of-type(even)::after {
+    left: -52px;
   }
   .section-heading {
     display: block;
+    margin-bottom: 32px;
   }
   .section-heading > p {
     margin-top: 18px;
   }
   .service-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
+    border: 0;
   }
   .service-card {
     min-height: 280px;
     padding: 26px 22px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    box-shadow: 0 14px 34px rgba(20, 38, 58, 0.055);
+  }
+  .service-card:nth-child(odd) {
+    margin-right: 16px;
+  }
+  .service-card:nth-child(even) {
+    margin-left: 16px;
   }
   .service-card > h3 {
     min-height: 0;
@@ -2064,18 +2104,58 @@ body:has(.service-dialog[open]) {
   .split-section {
     gap: 30px;
   }
+  .steps {
+    gap: 13px;
+    margin-top: 38px;
+    border-top: 0;
+  }
+  .step {
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: rgba(255, 254, 253, 0.82);
+    box-shadow: 0 13px 30px rgba(20, 38, 58, 0.05);
+  }
+  .step:nth-child(odd) {
+    margin-right: 16px;
+  }
+  .step:nth-child(even) {
+    margin-left: 16px;
+  }
+  .step h3 {
+    margin-top: 16px;
+  }
+  .audience-list {
+    display: grid;
+    gap: 10px;
+    border-top: 0;
+  }
+  .audience-list li {
+    padding: 17px 16px 17px 42px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: rgba(255, 254, 253, 0.78);
+  }
+  .audience-list li::before {
+    left: 16px;
+  }
+  .audience-list li:nth-child(even) {
+    margin-left: 16px;
+  }
+  .audience-list li:nth-child(odd) {
+    margin-right: 16px;
+  }
   .faq-section {
     padding-block: 62px;
   }
   .faq-caption {
     position: static;
   }
-  .step {
-    margin: 0;
-    padding: 18px 16px 18px 0;
-  }
   .about-image {
+    width: calc(100% - 16px);
     aspect-ratio: 1.2;
+    margin-bottom: 16px;
+    box-shadow: 16px 16px 0 #ded5c8;
   }
   .about-facts {
     gap: 26px;
@@ -2100,6 +2180,12 @@ body:has(.service-dialog[open]) {
   }
   .consultation-cards {
     grid-template-columns: 1fr;
+  }
+  .consultation-card:first-child {
+    margin-right: 12px;
+  }
+  .consultation-card:last-child {
+    margin-left: 12px;
   }
   .consultation-card:hover,
   .consultation-card:focus-within {
