@@ -10,7 +10,7 @@ export default function About({ lang }: { lang: Language }) {
       <div className="page-shell about-layout">
         <div className="about-image">
           <Image
-            src="/images/hero.png"
+            src="/images/who.jpg"
             fill
             sizes="(max-width: 760px) 100vw, 42vw"
             alt={common.founderImage}

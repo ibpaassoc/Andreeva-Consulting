@@ -5,13 +5,17 @@ export default function Footer({ lang }: { lang: Language }) {
   const t = getDictionary(lang).footer;
   const base = homePath(lang);
   const socials = [
-    ["Instagram", process.env.INSTAGRAM_URL],
+    [
+      "Instagram",
+      process.env.INSTAGRAM_URL ||
+        "https://www.instagram.com/andreeva__iuliia/",
+    ],
     ["Telegram", process.env.TELEGRAM_URL],
     ["WhatsApp", process.env.WHATSAPP_URL],
   ].filter((entry): entry is [string, string] =>
     Boolean(entry[1] && /^https:\/\//.test(entry[1])),
   );
-  const email = process.env.CONTACT_EMAIL;
+  const email = process.env.CONTACT_EMAIL || "support@andreevaconsulting.org";
 
   return (
     <footer id="contact" className="site-footer">
@@ -41,11 +45,45 @@ export default function Footer({ lang }: { lang: Language }) {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
+                className={label === "Instagram" ? "footer-contact-link" : undefined}
               >
+                {label === "Instagram" && (
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="3" y="3" width="18" height="18" rx="5" />
+                    <circle cx="12" cy="12" r="4" />
+                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                  </svg>
+                )}
                 {label} ↗
               </a>
             ))}
-            {email && <a href={`mailto:${email}`}>{email}</a>}
+            {email && (
+              <a className="footer-contact-link" href={`mailto:${email}`}>
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="m4 7 8 6 8-6" />
+                </svg>
+                {email}
+              </a>
+            )}
             {!email && !socials.length && <p>{t.contactsPending}</p>}
           </div>
         </div>
