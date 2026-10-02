@@ -572,26 +572,28 @@ textarea:focus-visible {
   outline-offset: -5px;
 }
 .service-card:hover,
-.service-card:focus-within {
+.service-card:has(.service-card-trigger:focus-visible) {
   background: #fcfaf6;
   box-shadow: 0 20px 46px rgba(20, 38, 58, 0.08);
   transform: translateY(-5px);
 }
 .service-card:hover::before,
-.service-card:focus-within::before {
+.service-card:has(.service-card-trigger:focus-visible)::before {
   transform: scaleX(1);
 }
 .service-card:hover .service-number,
-.service-card:focus-within .service-number {
+.service-card:has(.service-card-trigger:focus-visible) .service-number {
   transform: translateX(5px);
 }
 .service-card:hover .text-action,
-.service-card:focus-within .text-action {
+.service-card:has(.service-card-trigger:focus-visible) .text-action {
   border-color: var(--navy);
   color: var(--gold);
 }
 .service-card:hover .text-action span[aria-hidden],
-.service-card:focus-within .text-action span[aria-hidden] {
+.service-card:has(.service-card-trigger:focus-visible)
+  .text-action
+  span[aria-hidden] {
   transform: translateX(5px);
 }
 .service-dialog {
