@@ -1054,6 +1054,20 @@ body:has(.service-dialog[open]) {
   font-size: 12px;
   color: #5d6267;
 }
+.faq-section {
+  padding-block: 78px;
+}
+.faq-layout {
+  align-items: start;
+}
+.faq-caption {
+  transition: transform 0.35s ease;
+}
+.faq-section.is-expanded .faq-caption {
+  position: sticky;
+  top: calc(100svh - 245px);
+  align-self: end;
+}
 .faq-list {
   border-top: 1px solid var(--line);
 }
@@ -1091,6 +1105,35 @@ body:has(.service-dialog[open]) {
   margin: 0 0 24px;
   line-height: 1.7;
   font-size: 14px;
+}
+.faq-toggle {
+  display: flex;
+  width: 100%;
+  min-height: 58px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid var(--gold);
+  background: transparent;
+  color: var(--navy);
+  font: 700 12px var(--font-manrope), sans-serif;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.faq-toggle:hover {
+  color: var(--gold);
+}
+.faq-toggle-arrow {
+  color: var(--gold);
+  font-size: 22px;
+  font-weight: 400;
+  transition: transform 0.28s ease;
+}
+.faq-toggle[aria-expanded="true"] .faq-toggle-arrow {
+  transform: rotate(180deg);
 }
 .booking-section {
   position: relative;
@@ -1635,6 +1678,12 @@ body:has(.service-dialog[open]) {
   }
   .split-section {
     gap: 30px;
+  }
+  .faq-section {
+    padding-block: 62px;
+  }
+  .faq-section.is-expanded .faq-caption {
+    position: static;
   }
   .step {
     margin: 0;

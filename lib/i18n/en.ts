@@ -265,6 +265,8 @@ export const en = {
   },
   faq: {
     title: "Frequently asked questions",
+    showMore: "See more questions",
+    showLess: "Show fewer questions",
     questions: [
       [
         "Will my education and experience from outside the U.S. count?",
