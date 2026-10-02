@@ -2152,6 +2152,10 @@ body:has(.service-dialog[open]) {
     width: 44px;
     height: 44px;
   }
+  .service-dialog-close,
+  .consultation-flow-close {
+    display: none;
+  }
   .consultation-flow-panel {
     inset: auto 0 0;
     width: 100%;
@@ -2177,10 +2181,6 @@ body:has(.service-dialog[open]) {
   .consultation-flow-back {
     max-width: 128px;
     text-align: left;
-  }
-  .consultation-flow-close {
-    width: 44px;
-    height: 44px;
   }
   .consultation-flow-content {
     padding: 32px 18px calc(42px + env(safe-area-inset-bottom));
