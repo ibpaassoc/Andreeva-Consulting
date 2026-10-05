@@ -1,13 +1,15 @@
 "use client";
 
 import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { getDictionary, type Language } from "@lib/i18n";
+import {
+  gsap,
+  motionEase,
+  revealSectionLabel,
+  useGSAP,
+} from "@lib/motion";
 import { useConsultationFlow } from "./ConsultationFlow";
 import { consultations, type ConsultationKey } from "./consultations";
-
-gsap.registerPlugin(useGSAP);
 
 function ConsultationArtwork({ type }: { type: ConsultationKey }) {
   if (type === "immigration") {
@@ -63,36 +65,58 @@ export default function Booking({ lang }: { lang: Language }) {
   const { openCalendar } = useConsultationFlow();
 
   useGSAP(
-    (_context, contextSafe) => {
+    () => {
       const media = gsap.matchMedia();
 
       media.add("(prefers-reduced-motion: no-preference)", () => {
-        const reveal = contextSafe(() => {
-          gsap.fromTo(
-            ".consultation-intro > *, .consultation-card",
-            { y: 30, autoAlpha: 0 },
-            {
-              y: 0,
-              autoAlpha: 1,
-              duration: 0.7,
-              stagger: 0.09,
-              ease: "power3.out",
-              clearProps: "all",
-            },
-          );
+        revealSectionLabel(".consultation-intro .eyebrow", {
+          trigger: sectionRef.current,
+          scope: sectionRef.current,
+          start: "top 78%",
         });
-
-        const observer = new IntersectionObserver(
-          ([entry]) => {
-            if (!entry.isIntersecting) return;
-            reveal();
-            observer.disconnect();
-          },
-          { threshold: 0.14 },
+        const cards = gsap.utils.toArray<HTMLElement>(
+          ".consultation-card",
+          sectionRef.current,
         );
-
-        if (sectionRef.current) observer.observe(sectionRef.current);
-        return () => observer.disconnect();
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 78%",
+              once: true,
+            },
+          })
+          .fromTo(
+            ".consultation-intro > *:not(.eyebrow)",
+            { x: -30, opacity: 0 },
+            {
+              x: 0,
+              opacity: 1,
+              duration: 0.58,
+              stagger: 0.075,
+              ease: motionEase.editorial,
+              clearProps: "transform,opacity,visibility",
+            },
+            0.1,
+          )
+          .fromTo(
+            cards,
+            {
+              x: (index) => (index === 0 ? -54 : 54),
+              scale: 0.97,
+              opacity: 0,
+            },
+            {
+              x: 0,
+              scale: 1,
+              opacity: 1,
+              duration: 0.82,
+              stagger: 0.1,
+              ease: motionEase.editorialInOut,
+              clearProps: "transform,opacity,visibility",
+            },
+            0.22,
+          );
       });
 
       return () => media.revert();
