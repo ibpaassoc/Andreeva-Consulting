@@ -260,6 +260,7 @@ textarea:focus-visible {
   color: #5d6267;
 }
 .site-footer {
+  position: relative;
   padding: 36px 0;
   background: var(--navy);
   color: white;
