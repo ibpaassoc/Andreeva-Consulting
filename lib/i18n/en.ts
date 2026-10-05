@@ -36,6 +36,11 @@ export const en = {
   hero: {
     eyebrow: "Beauty licensing & business support",
     title: "Your experience deserves a place in the U.S. beauty industry",
+    titleLines: [
+      "Your experience deserves",
+      "a place in the U.S.",
+      "beauty industry",
+    ],
     description:
       "We help beauty professionals pursue a U.S. license using education and experience gained abroad, without starting over at an American college where state rules allow.",
     facts: [

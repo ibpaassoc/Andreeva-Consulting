@@ -10,7 +10,7 @@ export default function HeroBackground({ lang }: { lang: Language }) {
         sizes="100vw"
         fill
         priority
-        className="object-cover object-center"
+        className="hero-image object-cover object-center"
       />
     </div>
   );

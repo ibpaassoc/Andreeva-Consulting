@@ -1,5 +1,6 @@
 import { getDictionary, type Language } from "@lib/i18n";
 import { homePath, navigation } from "@config/navigation";
+import FooterMotion from "./FooterMotion";
 
 export default function Footer({ lang }: { lang: Language }) {
   const t = getDictionary(lang).footer;
@@ -18,7 +19,11 @@ export default function Footer({ lang }: { lang: Language }) {
   const email = process.env.CONTACT_EMAIL || "support@andreevaconsulting.org";
 
   return (
-    <footer id="contact" className="site-footer">
+    <FooterMotion>
+      <div className="footer-wordmark" aria-hidden="true">
+        <span className="footer-wordmark-primary">ANDREEVA</span>
+        <span className="footer-wordmark-secondary">CONSULTING</span>
+      </div>
       <div className="page-shell">
         <div className="footer-grid">
           <div>
@@ -96,6 +101,6 @@ export default function Footer({ lang }: { lang: Language }) {
         </div>
         <p className="footer-disclaimer">{t.disclaimer}</p>
       </div>
-    </footer>
+    </FooterMotion>
   );
 }

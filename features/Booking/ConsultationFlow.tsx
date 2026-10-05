@@ -9,13 +9,10 @@ import {
   type ReactNode,
 } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { getDictionary, type Language } from "@lib/i18n";
+import { gsap, motionEase, useGSAP } from "@lib/motion";
 import { useBottomSheetDrag } from "@shared/useBottomSheetDrag";
 import { consultations, type ConsultationKey } from "./consultations";
-
-gsap.registerPlugin(useGSAP);
 
 type FlowState =
   | { step: "picker"; selectedKey: null }
@@ -84,6 +81,9 @@ function ConsultationFlowDialog({
   const panelRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const progressRef = useRef<HTMLSpanElement>(null);
+  const stepDirectionRef = useRef(1);
+  const stepTweenRef = useRef<gsap.core.Tween | null>(null);
   const selected = consultations.find(({ key }) => key === flow?.selectedKey);
   const selectedIndex = consultations.findIndex(
     ({ key }) => key === flow?.selectedKey,
@@ -96,27 +96,72 @@ function ConsultationFlowDialog({
   const animateClose = contextSafe(
     (dialog: HTMLDialogElement, panel: HTMLDivElement) => {
       if (!dialog.open) return;
+      const siteStage = document.getElementById("site-stage");
 
       const reduceMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
       if (reduceMotion) {
+        if (siteStage) gsap.set(siteStage, { clearProps: "transform" });
         dialog.close();
         return;
       }
 
       const mobile = window.matchMedia("(max-width: 760px)").matches;
-      gsap.to(panel, {
-        xPercent: mobile ? 0 : 102,
-        yPercent: mobile ? 102 : 0,
-        autoAlpha: 0,
-        duration: 0.34,
-        ease: "power3.in",
-        overwrite: "auto",
+      const timeline = gsap.timeline({
+        defaults: { overwrite: "auto" },
         onComplete: () => dialog.close(),
       });
+      timeline
+        .to(
+          panel,
+          {
+            x: mobile ? 0 : 34,
+            yPercent: mobile ? 102 : 0,
+            clipPath: mobile
+              ? "inset(18% 0 0 0 round 20px 20px 0 0)"
+              : "inset(0 0 0 16%)",
+            autoAlpha: 0,
+            duration: 0.36,
+            ease: "power3.in",
+          },
+          0,
+        )
+        .to(
+          siteStage,
+          {
+            scale: 1,
+            duration: 0.4,
+            ease: motionEase.editorialInOut,
+            clearProps: "transform",
+          },
+          0,
+        );
     },
   );
+
+  function transitionStep(nextFlow: FlowState, direction: number) {
+    const content = contentRef.current;
+    stepDirectionRef.current = direction;
+    stepTweenRef.current?.kill();
+
+    if (
+      !content ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      onChange(nextFlow);
+      return;
+    }
+
+    stepTweenRef.current = gsap.to(content, {
+      x: -24 * direction,
+      autoAlpha: 0,
+      duration: 0.22,
+      ease: "power2.in",
+      overwrite: "auto",
+      onComplete: () => onChange(nextFlow),
+    });
+  }
 
   useEffect(() => {
     if (!selected) return;
@@ -164,16 +209,30 @@ function ConsultationFlowDialog({
 
       if (!dialog.open) {
         dialog.showModal();
+        const siteStage = document.getElementById("site-stage");
         const reduceMotion = window.matchMedia(
           "(prefers-reduced-motion: reduce)",
         ).matches;
         const mobile = window.matchMedia("(max-width: 760px)").matches;
 
-        if (!reduceMotion) {
+        if (reduceMotion) {
+          if (siteStage) gsap.set(siteStage, { clearProps: "transform" });
+          gsap.set(panel, { clearProps: "all" });
+        } else {
           const timeline = gsap.timeline({
             defaults: { ease: "power3.out" },
           });
           timeline
+            .to(
+              siteStage,
+              {
+                scale: mobile ? 0.995 : 0.988,
+                duration: 0.5,
+                ease: motionEase.editorialInOut,
+                transformOrigin: "50% 50%",
+              },
+              0,
+            )
             .fromTo(
               ".consultation-flow-scrim",
               { autoAlpha: 0 },
@@ -183,14 +242,20 @@ function ConsultationFlowDialog({
             .fromTo(
               panel,
               {
-                xPercent: mobile ? 0 : 102,
+                x: mobile ? 0 : 42,
                 yPercent: mobile ? 102 : 0,
+                clipPath: mobile
+                  ? "inset(18% 0 0 0 round 20px 20px 0 0)"
+                  : "inset(0 0 0 18%)",
               },
               {
-                xPercent: 0,
+                x: 0,
                 yPercent: 0,
+                clipPath: mobile
+                  ? "inset(0% 0 0 0 round 20px 20px 0 0)"
+                  : "inset(0 0 0 0%)",
                 duration: 0.52,
-                clearProps: "transform",
+                clearProps: "transform,clipPath",
               },
               0.04,
             );
@@ -207,7 +272,7 @@ function ConsultationFlowDialog({
     },
     {
       scope: dialogRef,
-      dependencies: [flow],
+      dependencies: [Boolean(flow)],
       revertOnUpdate: true,
     },
   );
@@ -219,7 +284,7 @@ function ConsultationFlowDialog({
 
       gsap.fromTo(
         contentRef.current,
-        { x: flow.step === "calendar" ? 20 : -20, autoAlpha: 0 },
+        { x: 24 * stepDirectionRef.current, autoAlpha: 0 },
         {
           x: 0,
           autoAlpha: 1,
@@ -228,6 +293,15 @@ function ConsultationFlowDialog({
           clearProps: "all",
         },
       );
+      if (progressRef.current) {
+        gsap.to(progressRef.current, {
+          scaleX: flow.step === "picker" ? 0.5 : 1,
+          duration: 0.48,
+          ease: motionEase.editorialInOut,
+          transformOrigin: "0% 50%",
+          overwrite: "auto",
+        });
+      }
       const focusTimer = window.setTimeout(
         () => headingRef.current?.focus(),
         120,
@@ -252,7 +326,23 @@ function ConsultationFlowDialog({
         event.preventDefault();
         closeDialog();
       }}
-      onClose={onDismiss}
+      onClose={() => {
+        stepTweenRef.current?.kill();
+        const siteStage = document.getElementById("site-stage");
+        if (siteStage) {
+          gsap.to(siteStage, {
+            scale: 1,
+            duration: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? 0
+              : 0.28,
+            ease: motionEase.editorialInOut,
+            clearProps: "transform",
+            overwrite: "auto",
+          });
+        }
+        onDismiss();
+      }}
       onClick={(event) => {
         if (event.target === event.currentTarget) closeDialog();
       }}
@@ -283,7 +373,7 @@ function ConsultationFlowDialog({
               type="button"
               className="consultation-flow-back"
               onClick={() =>
-                onChange({ step: "picker", selectedKey: null })
+                transitionStep({ step: "picker", selectedKey: null }, -1)
               }
             >
               <span aria-hidden="true">←</span> {t.backToOptions}
@@ -302,6 +392,14 @@ function ConsultationFlowDialog({
           >
             <span aria-hidden="true">×</span>
           </button>
+          <span className="consultation-flow-progress" aria-hidden="true">
+            <span
+              ref={progressRef}
+              style={{
+                transform: `scaleX(${flow.step === "picker" ? 0.5 : 1})`,
+              }}
+            />
+          </span>
         </div>
 
         <div
@@ -329,10 +427,13 @@ function ConsultationFlowDialog({
                       type="button"
                       className="consultation-picker-option"
                       onClick={() =>
-                        onChange({
-                          step: "calendar",
-                          selectedKey: consultation.key,
-                        })
+                        transitionStep(
+                          {
+                            step: "calendar",
+                            selectedKey: consultation.key,
+                          },
+                          1,
+                        )
                       }
                     >
                       <span
