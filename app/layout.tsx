@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Manrope } from "next/font/google";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { getDictionary, type Language } from "@lib/i18n";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 async function requestLanguage(): Promise<Language> {
@@ -40,6 +41,7 @@ export default async function RootLayout({
     <html lang={lang}>
       <body className={`${manrope.variable} ${cormorant.variable}`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
