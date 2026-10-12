@@ -2624,6 +2624,19 @@ body:has(.service-dialog[open]) {
   padding-top: 0;
   white-space: nowrap;
 }
+@media (min-width: 761px) {
+  .consultation-flow-panel-calendar .consultation-flow-content {
+    justify-content: center;
+    padding-block: 24px;
+  }
+  .consultation-flow-panel-calendar .consultation-flow-calendar,
+  .consultation-flow-panel-calendar .consultation-flow-calendar iframe {
+    height: min(540px, calc(100dvh - 110px)) !important;
+  }
+  .consultation-flow-panel-calendar .consultation-flow-calendar {
+    flex: 0 0 min(540px, calc(100dvh - 110px));
+  }
+}
 .site-footer {
   padding-top: 38px;
 }

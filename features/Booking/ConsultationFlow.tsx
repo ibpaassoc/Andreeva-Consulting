@@ -297,7 +297,17 @@ function ConsultationFlowDialog({
     <dialog
       ref={dialogRef}
       className="consultation-flow-dialog"
-      aria-labelledby="consultation-flow-title"
+      aria-labelledby={
+        flow.step === "picker" ? "consultation-flow-title" : undefined
+      }
+      aria-label={
+        flow.step === "calendar" && selectedIndex >= 0
+          ? t.calendarTitle.replace(
+              "{consultation}",
+              t.items[selectedIndex].shortTitle,
+            )
+          : undefined
+      }
       onCancel={(event) => {
         event.preventDefault();
         closeDialog();
@@ -335,6 +345,9 @@ function ConsultationFlowDialog({
             <button
               type="button"
               className="consultation-flow-back"
+              ref={(node) => {
+                headingRef.current = node;
+              }}
               onClick={() =>
                 transitionStep({ step: "picker", selectedKey: null }, -1)
               }
@@ -382,7 +395,6 @@ function ConsultationFlowDialog({
               >
                 {t.pickerEyebrow}
               </p>
-              <p className="consultation-flow-lead">{t.pickerLead}</p>
               <div className="consultation-picker-options">
                 {consultations.map((consultation, index) => {
                   const item = t.items[index];
@@ -441,35 +453,6 @@ function ConsultationFlowDialog({
             selected &&
             selectedIndex >= 0 && (
               <>
-                <div className="consultation-calendar-heading-row">
-                  <p className="eyebrow">{t.calendarEyebrow}</p>
-                  <a
-                    href={`https://cal.com/${selected.calLink}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cal-external-link"
-                  >
-                    {t.openCalendar} <span aria-hidden="true">↗</span>
-                  </a>
-                </div>
-                <h2
-                  id="consultation-flow-title"
-                  ref={(node) => {
-                    headingRef.current = node;
-                  }}
-                  tabIndex={-1}
-                >
-                  {t.calendarTitle.replace(
-                    "{consultation}",
-                    t.items[selectedIndex].shortTitle,
-                  )}
-                </h2>
-                <div className="consultation-flow-calendar-meta">
-                  <span>{t.items[selectedIndex].duration}</span>
-                  <span>{t.items[selectedIndex].format}</span>
-                  <span>{t.items[selectedIndex].price}</span>
-                </div>
-                <div className="consultation-flow-calendar-shell">
                   <Cal
                     key={selected.key}
                     namespace={selected.namespace}
@@ -481,7 +464,6 @@ function ConsultationFlowDialog({
                       "ui.color-scheme": "light",
                     }}
                   />
-                </div>
               </>
             )
           )}
