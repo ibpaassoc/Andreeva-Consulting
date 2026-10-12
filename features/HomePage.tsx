@@ -14,8 +14,8 @@ import { ConsultationFlowProvider } from "./Booking/ConsultationFlow";
 export default function HomePage({ lang }: { lang: Language }) {
   return (
     <ConsultationFlowProvider lang={lang}>
+      <Header lang={lang} />
       <div id="site-stage" className="site-stage">
-        <Header lang={lang} />
         <main>
           <Hero lang={lang} />
           <Services lang={lang} />
