@@ -100,6 +100,9 @@ export default function MobileMenu({ lang }: { lang: Language }) {
       const iconLines = rootRef.current?.querySelectorAll(
         ".mobile-menu-icon span",
       );
+      const topLine = iconLines?.[0] ?? null;
+      const middleLine = iconLines?.[1] ?? null;
+      const bottomLine = iconLines?.[2] ?? null;
       const reduceMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
@@ -113,13 +116,17 @@ export default function MobileMenu({ lang }: { lang: Language }) {
         });
         gsap.set(rows, { autoAlpha: open ? 1 : 0, y: 0 });
         gsap.set([cta, footer], { autoAlpha: open ? 1 : 0, y: 0 });
-        gsap.set(iconLines?.[0] ?? null, {
+        gsap.set(topLine, {
           rotation: open ? 45 : 0,
-          y: open ? 3.5 : 0,
+          y: open ? 7 : 0,
         });
-        gsap.set(iconLines?.[1] ?? null, {
+        gsap.set(middleLine, {
+          autoAlpha: open ? 0 : 1,
+          scaleX: open ? 0.2 : 1,
+        });
+        gsap.set(bottomLine, {
           rotation: open ? -45 : 0,
-          y: open ? -3.5 : 0,
+          y: open ? -7 : 0,
         });
 
         if (!open) {
@@ -167,13 +174,23 @@ export default function MobileMenu({ lang }: { lang: Language }) {
             0,
           )
           .to(
-            iconLines?.[0] ?? null,
-            { rotation: 45, y: 3.5, duration: 0.34, ease: "power3.out" },
+            topLine,
+            { rotation: 45, y: 7, duration: 0.34, ease: "power3.out" },
             0.06,
           )
           .to(
-            iconLines?.[1] ?? null,
-            { rotation: -45, y: -3.5, duration: 0.34, ease: "power3.out" },
+            middleLine,
+            {
+              autoAlpha: 0,
+              scaleX: 0.2,
+              duration: 0.22,
+              ease: "power2.out",
+            },
+            0.06,
+          )
+          .to(
+            bottomLine,
+            { rotation: -45, y: -7, duration: 0.34, ease: "power3.out" },
             0.06,
           )
           .to(
@@ -221,12 +238,22 @@ export default function MobileMenu({ lang }: { lang: Language }) {
             0.08,
           )
           .to(
-            iconLines?.[0] ?? null,
+            topLine,
             { rotation: 0, y: 0, duration: 0.28, ease: "power3.inOut" },
             0.08,
           )
           .to(
-            iconLines?.[1] ?? null,
+            middleLine,
+            {
+              autoAlpha: 1,
+              scaleX: 1,
+              duration: 0.22,
+              ease: "power2.out",
+            },
+            0.12,
+          )
+          .to(
+            bottomLine,
             { rotation: 0, y: 0, duration: 0.28, ease: "power3.inOut" },
             0.08,
           );
@@ -297,8 +324,8 @@ export default function MobileMenu({ lang }: { lang: Language }) {
         <span className="mobile-menu-icon" aria-hidden="true">
           <span />
           <span />
+          <span />
         </span>
-        <span aria-hidden="true">{t.label}</span>
       </button>
       {mounted && (
         <nav
