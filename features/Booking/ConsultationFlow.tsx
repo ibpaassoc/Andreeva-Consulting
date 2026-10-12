@@ -96,13 +96,11 @@ function ConsultationFlowDialog({
   const animateClose = contextSafe(
     (dialog: HTMLDialogElement, panel: HTMLDivElement) => {
       if (!dialog.open) return;
-      const siteStage = document.getElementById("site-stage");
 
       const reduceMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
       if (reduceMotion) {
-        if (siteStage) gsap.set(siteStage, { clearProps: "transform" });
         dialog.close();
         return;
       }
@@ -124,16 +122,6 @@ function ConsultationFlowDialog({
             autoAlpha: 0,
             duration: 0.36,
             ease: "power3.in",
-          },
-          0,
-        )
-        .to(
-          siteStage,
-          {
-            scale: 1,
-            duration: 0.4,
-            ease: motionEase.editorialInOut,
-            clearProps: "transform",
           },
           0,
         );
@@ -209,30 +197,18 @@ function ConsultationFlowDialog({
 
       if (!dialog.open) {
         dialog.showModal();
-        const siteStage = document.getElementById("site-stage");
         const reduceMotion = window.matchMedia(
           "(prefers-reduced-motion: reduce)",
         ).matches;
         const mobile = window.matchMedia("(max-width: 760px)").matches;
 
         if (reduceMotion) {
-          if (siteStage) gsap.set(siteStage, { clearProps: "transform" });
           gsap.set(panel, { clearProps: "all" });
         } else {
           const timeline = gsap.timeline({
             defaults: { ease: "power3.out" },
           });
           timeline
-            .to(
-              siteStage,
-              {
-                scale: mobile ? 0.995 : 0.988,
-                duration: 0.5,
-                ease: motionEase.editorialInOut,
-                transformOrigin: "50% 50%",
-              },
-              0,
-            )
             .fromTo(
               ".consultation-flow-scrim",
               { autoAlpha: 0 },
@@ -328,19 +304,6 @@ function ConsultationFlowDialog({
       }}
       onClose={() => {
         stepTweenRef.current?.kill();
-        const siteStage = document.getElementById("site-stage");
-        if (siteStage) {
-          gsap.to(siteStage, {
-            scale: 1,
-            duration: window.matchMedia("(prefers-reduced-motion: reduce)")
-              .matches
-              ? 0
-              : 0.28,
-            ease: motionEase.editorialInOut,
-            clearProps: "transform",
-            overwrite: "auto",
-          });
-        }
         onDismiss();
       }}
       onClick={(event) => {
