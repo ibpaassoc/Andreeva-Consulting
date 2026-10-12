@@ -2390,7 +2390,8 @@ body:has(.service-dialog[open]) {
   line-height: 0.98;
   text-wrap: balance;
 }
-.consultation-flow-content h2:focus-visible {
+.consultation-flow-content h2:focus-visible,
+.consultation-flow-content > .eyebrow:focus-visible {
   outline: 3px solid var(--gold);
   outline-offset: 6px;
 }

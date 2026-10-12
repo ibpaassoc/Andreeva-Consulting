@@ -80,7 +80,7 @@ function ConsultationFlowDialog({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
+  const headingRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
   const stepDirectionRef = useRef(1);
   const stepTweenRef = useRef<gsap.core.Tween | null>(null);
@@ -372,14 +372,16 @@ function ConsultationFlowDialog({
         >
           {flow.step === "picker" ? (
             <>
-              <p className="eyebrow">{t.pickerEyebrow}</p>
-              <h2
+              <p
+                className="eyebrow"
                 id="consultation-flow-title"
-                ref={headingRef}
+                ref={(node) => {
+                  headingRef.current = node;
+                }}
                 tabIndex={-1}
               >
-                {t.title}
-              </h2>
+                {t.pickerEyebrow}
+              </p>
               <p className="consultation-flow-lead">{t.pickerLead}</p>
               <div className="consultation-picker-options">
                 {consultations.map((consultation, index) => {
@@ -452,7 +454,9 @@ function ConsultationFlowDialog({
                 </div>
                 <h2
                   id="consultation-flow-title"
-                  ref={headingRef}
+                  ref={(node) => {
+                    headingRef.current = node;
+                  }}
                   tabIndex={-1}
                 >
                   {t.calendarTitle.replace(
