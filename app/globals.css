@@ -2624,17 +2624,70 @@ body:has(.service-dialog[open]) {
   padding-top: 0;
   white-space: nowrap;
 }
+.consultation-calendar-intro {
+  display: none;
+}
+.consultation-calendar-topline-label {
+  display: none;
+}
 @media (min-width: 761px) {
+  .consultation-flow-panel.consultation-flow-panel-calendar {
+    width: clamp(500px, 50vw, 720px);
+  }
+  .consultation-flow-panel-calendar .consultation-flow-topline {
+    grid-template-columns: 1fr auto;
+    min-height: 70px;
+    padding: 11px 22px 11px 30px;
+  }
+  .consultation-flow-panel-calendar .consultation-flow-back,
+  .consultation-flow-panel-calendar .consultation-flow-step,
+  .consultation-flow-panel-calendar .consultation-flow-progress {
+    display: none;
+  }
+  .consultation-calendar-topline-label {
+    display: block;
+    color: #81786d;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+  .consultation-flow-panel-calendar .consultation-flow-close {
+    width: 46px;
+    height: 46px;
+    font-size: 25px;
+  }
   .consultation-flow-panel-calendar .consultation-flow-content {
-    justify-content: center;
-    padding-block: 24px;
+    justify-content: flex-start;
+    padding: 26px clamp(26px, 3vw, 38px) 0;
+  }
+  .consultation-calendar-intro {
+    display: block;
+    width: 100%;
+    margin-bottom: 14px;
+  }
+  .consultation-calendar-intro .eyebrow {
+    display: none;
+  }
+  .consultation-flow-content .consultation-calendar-intro h2 {
+    max-width: 420px;
+    font-size: clamp(32px, 3vw, 40px);
+    line-height: 0.96;
+  }
+  .consultation-calendar-lead {
+    max-width: 430px;
+    margin: 9px 0 0;
+    color: var(--ink);
+    font-size: 11px;
+    line-height: 1.5;
   }
   .consultation-flow-panel-calendar .consultation-flow-calendar,
   .consultation-flow-panel-calendar .consultation-flow-calendar iframe {
-    height: min(540px, calc(100dvh - 110px)) !important;
+    height: 100% !important;
   }
   .consultation-flow-panel-calendar .consultation-flow-calendar {
-    flex: 0 0 min(540px, calc(100dvh - 110px));
+    min-height: 0;
+    flex: 1;
   }
 }
 .site-footer {

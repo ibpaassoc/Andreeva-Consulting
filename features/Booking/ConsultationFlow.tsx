@@ -81,9 +81,11 @@ function ConsultationFlowDialog({
   const panelRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLElement>(null);
+  const desktopCalendarHeadingRef = useRef<HTMLHeadingElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
   const stepDirectionRef = useRef(1);
   const stepTweenRef = useRef<gsap.core.Tween | null>(null);
+  const [isDesktopCalendar, setIsDesktopCalendar] = useState(false);
   const selected = consultations.find(({ key }) => key === flow?.selectedKey);
   const selectedIndex = consultations.findIndex(
     ({ key }) => key === flow?.selectedKey,
@@ -91,6 +93,15 @@ function ConsultationFlowDialog({
 
   const finishClose = () => dialogRef.current?.close();
   const dragHandlers = useBottomSheetDrag(panelRef, finishClose);
+
+  useEffect(() => {
+    const viewport = window.matchMedia("(min-width: 761px)");
+    const updateViewport = () => setIsDesktopCalendar(viewport.matches);
+
+    updateViewport();
+    viewport.addEventListener("change", updateViewport);
+    return () => viewport.removeEventListener("change", updateViewport);
+  }, []);
 
   const { contextSafe } = useGSAP({ scope: dialogRef });
   const animateClose = contextSafe(
@@ -161,7 +172,7 @@ function ConsultationFlowDialog({
         cal("ui", {
           theme: "light",
           layout: "month_view",
-          hideEventTypeDetails: false,
+          hideEventTypeDetails: isDesktopCalendar,
           cssVarsPerTheme: {
             light: {
               "cal-brand": "#765b37",
@@ -181,7 +192,7 @@ function ConsultationFlowDialog({
     return () => {
       cancelled = true;
     };
-  }, [selected]);
+  }, [selected, isDesktopCalendar]);
 
   function closeDialog() {
     const dialog = dialogRef.current;
@@ -237,10 +248,13 @@ function ConsultationFlowDialog({
             );
         }
 
-        const focusTimer = window.setTimeout(
-          () => headingRef.current?.focus(),
-          reduceMotion ? 0 : 220,
-        );
+        const focusTimer = window.setTimeout(() => {
+          if (flow.step === "calendar" && isDesktopCalendar) {
+            desktopCalendarHeadingRef.current?.focus();
+            return;
+          }
+          headingRef.current?.focus();
+        }, reduceMotion ? 0 : 220);
         return () => {
           window.clearTimeout(focusTimer);
         };
@@ -248,7 +262,7 @@ function ConsultationFlowDialog({
     },
     {
       scope: dialogRef,
-      dependencies: [Boolean(flow)],
+      dependencies: [Boolean(flow), isDesktopCalendar],
       revertOnUpdate: true,
     },
   );
@@ -278,15 +292,18 @@ function ConsultationFlowDialog({
           overwrite: "auto",
         });
       }
-      const focusTimer = window.setTimeout(
-        () => headingRef.current?.focus(),
-        120,
-      );
+      const focusTimer = window.setTimeout(() => {
+        if (flow.step === "calendar" && isDesktopCalendar) {
+          desktopCalendarHeadingRef.current?.focus();
+          return;
+        }
+        headingRef.current?.focus();
+      }, 120);
       return () => window.clearTimeout(focusTimer);
     },
     {
       scope: dialogRef,
-      dependencies: [flow?.step, flow?.selectedKey],
+      dependencies: [flow?.step, flow?.selectedKey, isDesktopCalendar],
       revertOnUpdate: true,
     },
   );
@@ -342,18 +359,23 @@ function ConsultationFlowDialog({
         </div>
         <div className="consultation-flow-topline">
           {flow.step === "calendar" ? (
-            <button
-              type="button"
-              className="consultation-flow-back"
-              ref={(node) => {
-                headingRef.current = node;
-              }}
-              onClick={() =>
-                transitionStep({ step: "picker", selectedKey: null }, -1)
-              }
-            >
-              <span aria-hidden="true">←</span> {t.backToOptions}
-            </button>
+            <>
+              <button
+                type="button"
+                className="consultation-flow-back"
+                ref={(node) => {
+                  headingRef.current = node;
+                }}
+                onClick={() =>
+                  transitionStep({ step: "picker", selectedKey: null }, -1)
+                }
+              >
+                <span aria-hidden="true">←</span> {t.backToOptions}
+              </button>
+              <span className="consultation-calendar-topline-label">
+                {t.calendarTopline}
+              </span>
+            </>
           ) : (
             <span className="eyebrow">{t.eyebrow}</span>
           )}
@@ -453,17 +475,29 @@ function ConsultationFlowDialog({
             selected &&
             selectedIndex >= 0 && (
               <>
-                  <Cal
-                    key={selected.key}
-                    namespace={selected.namespace}
-                    calLink={selected.calLink}
-                    className="consultation-flow-calendar"
-                    config={{
-                      layout: "month_view",
-                      theme: "light",
-                      "ui.color-scheme": "light",
-                    }}
-                  />
+                <div className="consultation-calendar-intro">
+                  <div>
+                    <p className="eyebrow">{t.calendarEyebrow}</p>
+                    <h2 ref={desktopCalendarHeadingRef} tabIndex={-1}>
+                      {t.items[selectedIndex].topic}
+                    </h2>
+                    <p className="consultation-calendar-lead">
+                      {t.calendarDesktopLead}
+                    </p>
+                  </div>
+                </div>
+                <Cal
+                  key={`${selected.key}-${isDesktopCalendar ? "desktop" : "mobile"}`}
+                  namespace={selected.namespace}
+                  calLink={selected.calLink}
+                  className="consultation-flow-calendar"
+                  config={{
+                    layout: "month_view",
+                    hideEventTypeDetails: isDesktopCalendar,
+                    theme: "light",
+                    "ui.color-scheme": "light",
+                  }}
+                />
               </>
             )
           )}
