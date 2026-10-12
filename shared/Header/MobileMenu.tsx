@@ -265,14 +265,41 @@ export default function MobileMenu({ lang }: { lang: Language }) {
   useEffect(() => {
     if (!mounted) return;
 
-    const previousOverflow = document.body.style.overflow;
     const mobileViewport = window.matchMedia("(max-width: 760px)");
-    document.body.style.overflow = "hidden";
+    const root = document.documentElement;
+    const body = document.body;
+    const navigation = rootRef.current?.querySelector(".mobile-navigation");
+    const previousRootOverflow = root.style.overflow;
+    const previousRootOverscrollBehavior = root.style.overscrollBehavior;
+    const previousBodyOverflow = body.style.overflow;
+    const scrollKeys = new Set([
+      "ArrowDown",
+      "ArrowUp",
+      "End",
+      "Home",
+      "PageDown",
+      "PageUp",
+      " ",
+    ]);
+
+    root.style.overflow = "hidden";
+    root.style.overscrollBehavior = "none";
+    body.style.overflow = "hidden";
+
+    function isInsideNavigation(target: EventTarget | null) {
+      return target instanceof Node && navigation?.contains(target);
+    }
+
+    function preventBackgroundScroll(event: TouchEvent | WheelEvent) {
+      if (!isInsideNavigation(event.target)) event.preventDefault();
+    }
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape" && open) {
+      if (event.key === "Escape") {
         restoreFocusRef.current = true;
         setOpen(false);
+      } else if (scrollKeys.has(event.key) && !isInsideNavigation(event.target)) {
+        event.preventDefault();
       }
     }
 
@@ -287,13 +314,23 @@ export default function MobileMenu({ lang }: { lang: Language }) {
     }
 
     window.addEventListener("keydown", onKeyDown);
+    document.addEventListener("touchmove", preventBackgroundScroll, {
+      passive: false,
+    });
+    document.addEventListener("wheel", preventBackgroundScroll, {
+      passive: false,
+    });
     mobileViewport.addEventListener("change", onViewportChange);
     return () => {
-      document.body.style.overflow = previousOverflow;
+      root.style.overflow = previousRootOverflow;
+      root.style.overscrollBehavior = previousRootOverscrollBehavior;
+      body.style.overflow = previousBodyOverflow;
       window.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("touchmove", preventBackgroundScroll);
+      document.removeEventListener("wheel", preventBackgroundScroll);
       mobileViewport.removeEventListener("change", onViewportChange);
     };
-  }, [mounted, open]);
+  }, [mounted]);
 
   function toggleMenu() {
     if (open) {
