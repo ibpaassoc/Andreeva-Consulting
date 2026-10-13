@@ -493,7 +493,7 @@ function ConsultationFlowDialog({
                   className="consultation-flow-calendar"
                   config={{
                     layout: "month_view",
-                    hideEventTypeDetails: isDesktopCalendar,
+                    hideEventTypeDetails: String(isDesktopCalendar),
                     theme: "light",
                     "ui.color-scheme": "light",
                   }}
