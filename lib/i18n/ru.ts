@@ -355,9 +355,12 @@ export const ru = {
     ],
     selectedButton: "Календарь выбран",
     calendarEyebrow: "Запись",
+    calendarTopline: "Запись на консультацию",
     calendarTitle: "Запись на консультацию {consultation}",
     calendarLead:
       "Выберите свободную дату и время. Дальнейшая запись и оплата, если она предусмотрена, проходят в Cal.com.",
+    calendarDesktopLead:
+      "Выберите удобную дату и время для консультации. Встреча пройдёт онлайн в Google Meet.",
     openCalendar: "Открыть в новой вкладке",
   },
   footer: {

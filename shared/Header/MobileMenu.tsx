@@ -100,6 +100,9 @@ export default function MobileMenu({ lang }: { lang: Language }) {
       const iconLines = rootRef.current?.querySelectorAll(
         ".mobile-menu-icon span",
       );
+      const topLine = iconLines?.[0] ?? null;
+      const middleLine = iconLines?.[1] ?? null;
+      const bottomLine = iconLines?.[2] ?? null;
       const reduceMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
@@ -113,13 +116,17 @@ export default function MobileMenu({ lang }: { lang: Language }) {
         });
         gsap.set(rows, { autoAlpha: open ? 1 : 0, y: 0 });
         gsap.set([cta, footer], { autoAlpha: open ? 1 : 0, y: 0 });
-        gsap.set(iconLines?.[0] ?? null, {
+        gsap.set(topLine, {
           rotation: open ? 45 : 0,
-          y: open ? 3.5 : 0,
+          y: open ? 7 : 0,
         });
-        gsap.set(iconLines?.[1] ?? null, {
+        gsap.set(middleLine, {
+          autoAlpha: open ? 0 : 1,
+          scaleX: open ? 0.2 : 1,
+        });
+        gsap.set(bottomLine, {
           rotation: open ? -45 : 0,
-          y: open ? -3.5 : 0,
+          y: open ? -7 : 0,
         });
 
         if (!open) {
@@ -167,13 +174,23 @@ export default function MobileMenu({ lang }: { lang: Language }) {
             0,
           )
           .to(
-            iconLines?.[0] ?? null,
-            { rotation: 45, y: 3.5, duration: 0.34, ease: "power3.out" },
+            topLine,
+            { rotation: 45, y: 7, duration: 0.34, ease: "power3.out" },
             0.06,
           )
           .to(
-            iconLines?.[1] ?? null,
-            { rotation: -45, y: -3.5, duration: 0.34, ease: "power3.out" },
+            middleLine,
+            {
+              autoAlpha: 0,
+              scaleX: 0.2,
+              duration: 0.22,
+              ease: "power2.out",
+            },
+            0.06,
+          )
+          .to(
+            bottomLine,
+            { rotation: -45, y: -7, duration: 0.34, ease: "power3.out" },
             0.06,
           )
           .to(
@@ -221,12 +238,22 @@ export default function MobileMenu({ lang }: { lang: Language }) {
             0.08,
           )
           .to(
-            iconLines?.[0] ?? null,
+            topLine,
             { rotation: 0, y: 0, duration: 0.28, ease: "power3.inOut" },
             0.08,
           )
           .to(
-            iconLines?.[1] ?? null,
+            middleLine,
+            {
+              autoAlpha: 1,
+              scaleX: 1,
+              duration: 0.22,
+              ease: "power2.out",
+            },
+            0.12,
+          )
+          .to(
+            bottomLine,
             { rotation: 0, y: 0, duration: 0.28, ease: "power3.inOut" },
             0.08,
           );
@@ -238,14 +265,41 @@ export default function MobileMenu({ lang }: { lang: Language }) {
   useEffect(() => {
     if (!mounted) return;
 
-    const previousOverflow = document.body.style.overflow;
     const mobileViewport = window.matchMedia("(max-width: 760px)");
-    document.body.style.overflow = "hidden";
+    const root = document.documentElement;
+    const body = document.body;
+    const navigation = rootRef.current?.querySelector(".mobile-navigation");
+    const previousRootOverflow = root.style.overflow;
+    const previousRootOverscrollBehavior = root.style.overscrollBehavior;
+    const previousBodyOverflow = body.style.overflow;
+    const scrollKeys = new Set([
+      "ArrowDown",
+      "ArrowUp",
+      "End",
+      "Home",
+      "PageDown",
+      "PageUp",
+      " ",
+    ]);
+
+    root.style.overflow = "hidden";
+    root.style.overscrollBehavior = "none";
+    body.style.overflow = "hidden";
+
+    function isInsideNavigation(target: EventTarget | null) {
+      return target instanceof Node && navigation?.contains(target);
+    }
+
+    function preventBackgroundScroll(event: TouchEvent | WheelEvent) {
+      if (!isInsideNavigation(event.target)) event.preventDefault();
+    }
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape" && open) {
+      if (event.key === "Escape") {
         restoreFocusRef.current = true;
         setOpen(false);
+      } else if (scrollKeys.has(event.key) && !isInsideNavigation(event.target)) {
+        event.preventDefault();
       }
     }
 
@@ -260,13 +314,23 @@ export default function MobileMenu({ lang }: { lang: Language }) {
     }
 
     window.addEventListener("keydown", onKeyDown);
+    document.addEventListener("touchmove", preventBackgroundScroll, {
+      passive: false,
+    });
+    document.addEventListener("wheel", preventBackgroundScroll, {
+      passive: false,
+    });
     mobileViewport.addEventListener("change", onViewportChange);
     return () => {
-      document.body.style.overflow = previousOverflow;
+      root.style.overflow = previousRootOverflow;
+      root.style.overscrollBehavior = previousRootOverscrollBehavior;
+      body.style.overflow = previousBodyOverflow;
       window.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("touchmove", preventBackgroundScroll);
+      document.removeEventListener("wheel", preventBackgroundScroll);
       mobileViewport.removeEventListener("change", onViewportChange);
     };
-  }, [mounted, open]);
+  }, [mounted]);
 
   function toggleMenu() {
     if (open) {
@@ -297,8 +361,8 @@ export default function MobileMenu({ lang }: { lang: Language }) {
         <span className="mobile-menu-icon" aria-hidden="true">
           <span />
           <span />
+          <span />
         </span>
-        <span aria-hidden="true">{t.label}</span>
       </button>
       {mounted && (
         <nav

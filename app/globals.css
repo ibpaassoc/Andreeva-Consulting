@@ -477,10 +477,11 @@ textarea:focus-visible {
   }
   .mobile-menu-trigger {
     display: flex;
+    width: 44px;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
     min-height: 44px;
-    padding: 0 4px;
+    padding: 0;
     border: 0;
     background: transparent;
     color: var(--navy);
@@ -492,15 +493,22 @@ textarea:focus-visible {
   }
   .mobile-menu-icon {
     display: flex;
+    width: 24px;
+    height: 16px;
     flex-direction: column;
-    gap: 5px;
-    width: 22px;
+    justify-content: space-between;
   }
   .mobile-menu-icon span {
     display: block;
+    width: 24px;
     height: 2px;
+    border-radius: 999px;
     background: currentColor;
     transform-origin: center;
+  }
+  .mobile-menu-icon span:nth-child(2) {
+    width: 18px;
+    align-self: flex-end;
   }
   .mobile-navigation {
     position: fixed;
@@ -694,9 +702,6 @@ textarea:focus-visible {
   .mobile-menu-trigger {
     width: 44px;
     justify-content: center;
-  }
-  .mobile-menu-trigger > span:last-child {
-    display: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -2390,7 +2395,8 @@ body:has(.service-dialog[open]) {
   line-height: 0.98;
   text-wrap: balance;
 }
-.consultation-flow-content h2:focus-visible {
+.consultation-flow-content h2:focus-visible,
+.consultation-flow-content > .eyebrow:focus-visible {
   outline: 3px solid var(--gold);
   outline-offset: 6px;
 }
@@ -2617,6 +2623,72 @@ body:has(.service-dialog[open]) {
   display: inline-block;
   padding-top: 0;
   white-space: nowrap;
+}
+.consultation-calendar-intro {
+  display: none;
+}
+.consultation-calendar-topline-label {
+  display: none;
+}
+@media (min-width: 761px) {
+  .consultation-flow-panel.consultation-flow-panel-calendar {
+    width: clamp(500px, 50vw, 720px);
+  }
+  .consultation-flow-panel-calendar .consultation-flow-topline {
+    grid-template-columns: 1fr auto;
+    min-height: 70px;
+    padding: 11px 22px 11px 30px;
+  }
+  .consultation-flow-panel-calendar .consultation-flow-back,
+  .consultation-flow-panel-calendar .consultation-flow-step,
+  .consultation-flow-panel-calendar .consultation-flow-progress {
+    display: none;
+  }
+  .consultation-calendar-topline-label {
+    display: block;
+    color: #81786d;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+  .consultation-flow-panel-calendar .consultation-flow-close {
+    width: 46px;
+    height: 46px;
+    font-size: 25px;
+  }
+  .consultation-flow-panel-calendar .consultation-flow-content {
+    justify-content: flex-start;
+    padding: 26px clamp(26px, 3vw, 38px) 0;
+  }
+  .consultation-calendar-intro {
+    display: block;
+    width: 100%;
+    margin-bottom: 14px;
+  }
+  .consultation-calendar-intro .eyebrow {
+    display: none;
+  }
+  .consultation-flow-content .consultation-calendar-intro h2 {
+    max-width: 420px;
+    font-size: clamp(32px, 3vw, 40px);
+    line-height: 0.96;
+  }
+  .consultation-calendar-lead {
+    max-width: 430px;
+    margin: 9px 0 0;
+    color: var(--ink);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .consultation-flow-panel-calendar .consultation-flow-calendar,
+  .consultation-flow-panel-calendar .consultation-flow-calendar iframe {
+    height: 100% !important;
+  }
+  .consultation-flow-panel-calendar .consultation-flow-calendar {
+    min-height: 0;
+    flex: 1;
+  }
 }
 .site-footer {
   padding-top: 38px;

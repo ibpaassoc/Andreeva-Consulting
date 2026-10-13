@@ -363,9 +363,12 @@ export const en = {
     ],
     selectedButton: "Calendar selected",
     calendarEyebrow: "Schedule",
+    calendarTopline: "Book a consultation",
     calendarTitle: "Book your {consultation} consultation",
     calendarLead:
       "Choose an available date and time below. Cal.com handles the remaining booking steps and payment when applicable.",
+    calendarDesktopLead:
+      "Choose a convenient date and time for your consultation. The meeting will take place online in Google Meet.",
     openCalendar: "Open in a new tab",
   },
   footer: {

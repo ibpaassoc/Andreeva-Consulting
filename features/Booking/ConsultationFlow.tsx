@@ -80,10 +80,12 @@ function ConsultationFlowDialog({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
+  const headingRef = useRef<HTMLElement>(null);
+  const desktopCalendarHeadingRef = useRef<HTMLHeadingElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
   const stepDirectionRef = useRef(1);
   const stepTweenRef = useRef<gsap.core.Tween | null>(null);
+  const [isDesktopCalendar, setIsDesktopCalendar] = useState(false);
   const selected = consultations.find(({ key }) => key === flow?.selectedKey);
   const selectedIndex = consultations.findIndex(
     ({ key }) => key === flow?.selectedKey,
@@ -92,17 +94,24 @@ function ConsultationFlowDialog({
   const finishClose = () => dialogRef.current?.close();
   const dragHandlers = useBottomSheetDrag(panelRef, finishClose);
 
+  useEffect(() => {
+    const viewport = window.matchMedia("(min-width: 761px)");
+    const updateViewport = () => setIsDesktopCalendar(viewport.matches);
+
+    updateViewport();
+    viewport.addEventListener("change", updateViewport);
+    return () => viewport.removeEventListener("change", updateViewport);
+  }, []);
+
   const { contextSafe } = useGSAP({ scope: dialogRef });
   const animateClose = contextSafe(
     (dialog: HTMLDialogElement, panel: HTMLDivElement) => {
       if (!dialog.open) return;
-      const siteStage = document.getElementById("site-stage");
 
       const reduceMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
       if (reduceMotion) {
-        if (siteStage) gsap.set(siteStage, { clearProps: "transform" });
         dialog.close();
         return;
       }
@@ -124,16 +133,6 @@ function ConsultationFlowDialog({
             autoAlpha: 0,
             duration: 0.36,
             ease: "power3.in",
-          },
-          0,
-        )
-        .to(
-          siteStage,
-          {
-            scale: 1,
-            duration: 0.4,
-            ease: motionEase.editorialInOut,
-            clearProps: "transform",
           },
           0,
         );
@@ -173,7 +172,7 @@ function ConsultationFlowDialog({
         cal("ui", {
           theme: "light",
           layout: "month_view",
-          hideEventTypeDetails: false,
+          hideEventTypeDetails: isDesktopCalendar,
           cssVarsPerTheme: {
             light: {
               "cal-brand": "#765b37",
@@ -193,7 +192,7 @@ function ConsultationFlowDialog({
     return () => {
       cancelled = true;
     };
-  }, [selected]);
+  }, [selected, isDesktopCalendar]);
 
   function closeDialog() {
     const dialog = dialogRef.current;
@@ -209,30 +208,18 @@ function ConsultationFlowDialog({
 
       if (!dialog.open) {
         dialog.showModal();
-        const siteStage = document.getElementById("site-stage");
         const reduceMotion = window.matchMedia(
           "(prefers-reduced-motion: reduce)",
         ).matches;
         const mobile = window.matchMedia("(max-width: 760px)").matches;
 
         if (reduceMotion) {
-          if (siteStage) gsap.set(siteStage, { clearProps: "transform" });
           gsap.set(panel, { clearProps: "all" });
         } else {
           const timeline = gsap.timeline({
             defaults: { ease: "power3.out" },
           });
           timeline
-            .to(
-              siteStage,
-              {
-                scale: mobile ? 0.995 : 0.988,
-                duration: 0.5,
-                ease: motionEase.editorialInOut,
-                transformOrigin: "50% 50%",
-              },
-              0,
-            )
             .fromTo(
               ".consultation-flow-scrim",
               { autoAlpha: 0 },
@@ -261,10 +248,13 @@ function ConsultationFlowDialog({
             );
         }
 
-        const focusTimer = window.setTimeout(
-          () => headingRef.current?.focus(),
-          reduceMotion ? 0 : 220,
-        );
+        const focusTimer = window.setTimeout(() => {
+          if (flow.step === "calendar" && isDesktopCalendar) {
+            desktopCalendarHeadingRef.current?.focus();
+            return;
+          }
+          headingRef.current?.focus();
+        }, reduceMotion ? 0 : 220);
         return () => {
           window.clearTimeout(focusTimer);
         };
@@ -272,7 +262,7 @@ function ConsultationFlowDialog({
     },
     {
       scope: dialogRef,
-      dependencies: [Boolean(flow)],
+      dependencies: [Boolean(flow), isDesktopCalendar],
       revertOnUpdate: true,
     },
   );
@@ -302,15 +292,18 @@ function ConsultationFlowDialog({
           overwrite: "auto",
         });
       }
-      const focusTimer = window.setTimeout(
-        () => headingRef.current?.focus(),
-        120,
-      );
+      const focusTimer = window.setTimeout(() => {
+        if (flow.step === "calendar" && isDesktopCalendar) {
+          desktopCalendarHeadingRef.current?.focus();
+          return;
+        }
+        headingRef.current?.focus();
+      }, 120);
       return () => window.clearTimeout(focusTimer);
     },
     {
       scope: dialogRef,
-      dependencies: [flow?.step, flow?.selectedKey],
+      dependencies: [flow?.step, flow?.selectedKey, isDesktopCalendar],
       revertOnUpdate: true,
     },
   );
@@ -321,26 +314,23 @@ function ConsultationFlowDialog({
     <dialog
       ref={dialogRef}
       className="consultation-flow-dialog"
-      aria-labelledby="consultation-flow-title"
+      aria-labelledby={
+        flow.step === "picker" ? "consultation-flow-title" : undefined
+      }
+      aria-label={
+        flow.step === "calendar" && selectedIndex >= 0
+          ? t.calendarTitle.replace(
+              "{consultation}",
+              t.items[selectedIndex].shortTitle,
+            )
+          : undefined
+      }
       onCancel={(event) => {
         event.preventDefault();
         closeDialog();
       }}
       onClose={() => {
         stepTweenRef.current?.kill();
-        const siteStage = document.getElementById("site-stage");
-        if (siteStage) {
-          gsap.to(siteStage, {
-            scale: 1,
-            duration: window.matchMedia("(prefers-reduced-motion: reduce)")
-              .matches
-              ? 0
-              : 0.28,
-            ease: motionEase.editorialInOut,
-            clearProps: "transform",
-            overwrite: "auto",
-          });
-        }
         onDismiss();
       }}
       onClick={(event) => {
@@ -369,15 +359,23 @@ function ConsultationFlowDialog({
         </div>
         <div className="consultation-flow-topline">
           {flow.step === "calendar" ? (
-            <button
-              type="button"
-              className="consultation-flow-back"
-              onClick={() =>
-                transitionStep({ step: "picker", selectedKey: null }, -1)
-              }
-            >
-              <span aria-hidden="true">←</span> {t.backToOptions}
-            </button>
+            <>
+              <button
+                type="button"
+                className="consultation-flow-back"
+                ref={(node) => {
+                  headingRef.current = node;
+                }}
+                onClick={() =>
+                  transitionStep({ step: "picker", selectedKey: null }, -1)
+                }
+              >
+                <span aria-hidden="true">←</span> {t.backToOptions}
+              </button>
+              <span className="consultation-calendar-topline-label">
+                {t.calendarTopline}
+              </span>
+            </>
           ) : (
             <span className="eyebrow">{t.eyebrow}</span>
           )}
@@ -409,15 +407,16 @@ function ConsultationFlowDialog({
         >
           {flow.step === "picker" ? (
             <>
-              <p className="eyebrow">{t.pickerEyebrow}</p>
-              <h2
+              <p
+                className="eyebrow"
                 id="consultation-flow-title"
-                ref={headingRef}
+                ref={(node) => {
+                  headingRef.current = node;
+                }}
                 tabIndex={-1}
               >
-                {t.title}
-              </h2>
-              <p className="consultation-flow-lead">{t.pickerLead}</p>
+                {t.pickerEyebrow}
+              </p>
               <div className="consultation-picker-options">
                 {consultations.map((consultation, index) => {
                   const item = t.items[index];
@@ -476,45 +475,29 @@ function ConsultationFlowDialog({
             selected &&
             selectedIndex >= 0 && (
               <>
-                <div className="consultation-calendar-heading-row">
-                  <p className="eyebrow">{t.calendarEyebrow}</p>
-                  <a
-                    href={`https://cal.com/${selected.calLink}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cal-external-link"
-                  >
-                    {t.openCalendar} <span aria-hidden="true">↗</span>
-                  </a>
+                <div className="consultation-calendar-intro">
+                  <div>
+                    <p className="eyebrow">{t.calendarEyebrow}</p>
+                    <h2 ref={desktopCalendarHeadingRef} tabIndex={-1}>
+                      {t.items[selectedIndex].topic}
+                    </h2>
+                    <p className="consultation-calendar-lead">
+                      {t.calendarDesktopLead}
+                    </p>
+                  </div>
                 </div>
-                <h2
-                  id="consultation-flow-title"
-                  ref={headingRef}
-                  tabIndex={-1}
-                >
-                  {t.calendarTitle.replace(
-                    "{consultation}",
-                    t.items[selectedIndex].shortTitle,
-                  )}
-                </h2>
-                <div className="consultation-flow-calendar-meta">
-                  <span>{t.items[selectedIndex].duration}</span>
-                  <span>{t.items[selectedIndex].format}</span>
-                  <span>{t.items[selectedIndex].price}</span>
-                </div>
-                <div className="consultation-flow-calendar-shell">
-                  <Cal
-                    key={selected.key}
-                    namespace={selected.namespace}
-                    calLink={selected.calLink}
-                    className="consultation-flow-calendar"
-                    config={{
-                      layout: "month_view",
-                      theme: "light",
-                      "ui.color-scheme": "light",
-                    }}
-                  />
-                </div>
+                <Cal
+                  key={`${selected.key}-${isDesktopCalendar ? "desktop" : "mobile"}`}
+                  namespace={selected.namespace}
+                  calLink={selected.calLink}
+                  className="consultation-flow-calendar"
+                  config={{
+                    layout: "month_view",
+                    hideEventTypeDetails: isDesktopCalendar,
+                    theme: "light",
+                    "ui.color-scheme": "light",
+                  }}
+                />
               </>
             )
           )}
